@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tianguis Digital · Módulo Sourcing</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="CSS/style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body>
+  <!-- CABECERA: CIUDAD DE MÉXICO / CAPITAL DE LA TRANSFORMACIÓN + TIANGUIS DIGITAL -->
+  <header class="top-header">
+    <div class="brand-left">
+      <h1>CIUDAD DE MÉXICO</h1>
+      <h2>CAPITAL DE LA TRANSFORMACIÓN</h2>
+    </div>
+    <div class="brand-right">
+      <i class="fas fa-store" style="margin-right: 8px;"></i> TIANGUIS DIGITAL
+    </div>
+  </header>
+
+  <!-- BARRA DE NAVEGACIÓN (Acerca de Tianguis Digital) -->
+  <nav class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+      <img src="https://flowbite.com/docs/images/logo.svg" class="h-7" alt="Logo">
+      <span class="self-center text-xl text-[#0b3b5b] font-semibold whitespace-nowrap">Tianguis Digital</span>
+    </a>
+    <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+      <button type="button" class="text-white bg-[#0b3b5b] hover:bg-[#0f4a73] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Acceder</button>
+      <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-sticky" aria-expanded="false">
+        <span class="sr-only">Abrir menú</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/></svg>
+      </button>
+    </div>
+    <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+      <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+        <li><a href="#" class="block py-2 px-3 text-white bg-[#0b3b5b] rounded md:bg-transparent md:text-[#0b3b5b] md:p-0">Inicio</a></li>
+        <li><a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#0b3b5b] md:p-0">Acerca de</a></li>
+        <li><a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#0b3b5b] md:p-0">Servicios</a></li>
+        <li><a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[#0b3b5b] md:p-0">Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <main>
+    <!-- SECCIÓN BIENVENIDA -->
+    <section class="welcome-section">
+      <div class="welcome-text">
+        <h3>Bienvenido a Tianguis Digital</h3>
+        <p>El sistema de contrataciones públicas de la Ciudad de México pone a tu disposición herramientas y módulos para registrar, conducir y monitorear los procesos de contratación pública bajo los principios de apertura, eficiencia y economía para asegurar mejores bienes y servicios para todos.</p>
+      </div>
+      <button class="discover-btn" onclick="alert('Explora los módulos disponibles.')">Descubre <i class="fas fa-arrow-right"></i></button>
+    </section>
+
+    <!-- MÓDULO SOURCING -->
+    <div class="module-header">
+      <h4>MÓDULO SOURCING</h4>
+      <span class="objetivo-badge"><i class="fas fa-bullseye" style="margin-right: 6px;"></i>Gestión de admisión y evaluación del proveedor</span>
+    </div>
+
+    <!-- Proveedor de ejemplo -->
+    <div class="proveedor-tag">
+      <i class="fas fa-building" style="margin-right: 10px;"></i> Proveedor: CONSTRUCTORA ÁGUILA, S.A. DE C.V.  •  RFC: CAAG1234567A1
+    </div>
+
+    <!-- Grid de tarjetas -->
+    <div class="cards-grid" id="sourcingGrid">
+      <!-- Registro -->
+      <div class="card" id="cardRegistro">
+        <i class="fas fa-user-edit icon"></i>
+        <h5>Registro</h5>
+        <p>Alta de proveedores, datos fiscales, RFC, régimen.</p>
+        <div class="status" data-status="complete" id="statusRegistro">
+          <i class="fas fa-check-circle"></i> Completo
+        </div>
+      </div>
+
+      <!-- Clasificación -->
+      <div class="card" id="cardClasificacion">
+        <i class="fas fa-tags icon"></i>
+        <h5>Clasificación</h5>
+        <p>Giro, tamaño (PYME, gran empresa), especialidad.</p>
+        <div class="status" data-status="pending" id="statusClasificacion">
+          <i class="fas fa-clock"></i> Pendiente
+        </div>
+      </div>
+
+      <!-- Compliance -->
+      <div class="card" id="cardCompliance">
+        <i class="fas fa-shield-alt icon"></i>
+        <h5>Compliance</h5>
+        <p>Validación legal, SAT/IMSS/INFONAVIT, factibilidad.</p>
+        <div class="status" data-status="complete" id="statusCompliance">
+          <i class="fas fa-check-circle"></i> Validado
+        </div>
+      </div>
+
+      <!-- Evaluación (score) -->
+      <div class="card" id="cardEvaluacion">
+        <i class="fas fa-chart-line icon"></i>
+        <h5>Evaluación</h5>
+        <p>Score basado en historial, capacidad financiera.</p>
+        <div class="score" id="evaluacionScore">85 puntos</div>
+      </div>
+
+      <!-- Perfil Calificado -->
+      <div class="card profile-card" id="cardPerfil">
+        <i class="fas fa-id-card icon"></i>
+        <h5>Perfil Calificado</h5>
+        <p>Resultado final de aptitud para contratación.</p>
+        <div class="profile-result apto" id="perfilResultado">APTO</div>
+        <button class="btn" id="evaluarBtn"><i class="fas fa-sync-alt" style="margin-right: 8px;"></i>Actualizar Evaluación</button>
+      </div>
+    </div>
+
+    <p style="text-align: right; margin-top: 0.5rem; color: #5f7d9c; font-size: 0.85rem;">
+      <i class="fas fa-mouse-pointer"></i> Haz clic en "Actualizar" para simular cambios
+    </p>
+  </main>
+
+  <footer>
+    <p>Tianguis Digital · Ciudad de México · Contrataciones abiertas y eficientes</p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;">Módulo Sourcing · Diseño apegado a imagen oficial</p>
+  </footer>
+
+  <!-- JavaScript externo -->
+  <script src="Scripts/script.js"></script>
+  <!-- Flowbite JS (requiere Popper opcional) -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+</body>
+</html>
+
+<!-- Personalización de la paleta Tailwind (opcional) -->
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: '#0b3b5b',
+          'brand-strong': '#0f4a73',
+          'brand-medium': '#2a6d9c',
+          heading: '#0b3b5b',
+          body: '#1e293b',
+          neutral: {
+            primary: '#ffffff',
+            secondary: { soft: '#f8fafc' },
+            tertiary: '#e2e8f0'
+          }
+        },
+        borderRadius: {
+          base: '0.5rem',
+          sm: '0.25rem'
+        }
+      }
+    }
+  }
+</script>

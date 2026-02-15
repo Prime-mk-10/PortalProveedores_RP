@@ -1,0 +1,344 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "flowbite/src/themes/default";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f7fc;
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+/* encabezado estilo gobierno CDMX */
+.top-header {
+  background-color: #0b3b5b;
+  color: white;
+  padding: 1rem 5%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-left h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.brand-left h2 {
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.brand-right {
+  background-color: rgba(255, 255, 255, 0.12);
+  padding: 0.5rem 1.5rem;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 1.4rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(4px);
+}
+
+/* barra de navegación */
+.nav-tianguis {
+  background-color: white;
+  border-bottom: 1px solid #d1d9e6;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  padding: 0.75rem 5%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-title {
+  font-weight: 600;
+  color: #0b3b5b;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: 0.2s;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-links li a:hover {
+  border-bottom-color: #0b3b5b;
+  color: #0b3b5b;
+}
+
+/* main */
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 5%;
+}
+
+/* sección bienvenida */
+.welcome-section {
+  background: linear-gradient(to right, #ffffff, #f0f7ff);
+  border-radius: 24px;
+  padding: 2rem 2.5rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 8px 20px rgba(0,20,50,0.08);
+  border: 1px solid rgba(11, 59, 91, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.welcome-text h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0b3b5b;
+  margin-bottom: 0.75rem;
+}
+
+.welcome-text p {
+  max-width: 750px;
+  color: #334155;
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+.discover-btn {
+  background-color: #0b3b5b;
+  color: white;
+  border: none;
+  padding: 0.9rem 2.2rem;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 4px 8px rgba(11,59,91,0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.discover-btn:hover {
+  background-color: #0f4a73;
+  transform: scale(1.02);
+}
+
+/* módulo sourcing */
+.module-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.module-header h4 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0b3b5b;
+  letter-spacing: -0.3px;
+}
+
+.module-header .objetivo-badge {
+  background-color: #e9eff8;
+  color: #0b3b5b;
+  padding: 0.3rem 1.2rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-left: 4px solid #0b3b5b;
+}
+
+.proveedor-tag {
+  background-color: #dbeafe;
+  color: #1e3a8a;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  border-radius: 40px;
+  display: inline-block;
+  margin-bottom: 1.8rem;
+  font-size: 0.95rem;
+  border: 1px solid #b3ceff;
+}
+
+/* grid de cards */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.8rem;
+  margin-top: 1.2rem;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 1.8rem 1.5rem;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+  transition: 0.15s ease;
+  border: 1px solid rgba(11,59,91,0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 35px rgba(11,59,91,0.1);
+  border-color: rgba(11,59,91,0.2);
+}
+
+.card .icon {
+  font-size: 2.4rem;
+  color: #0b3b5b;
+  margin-bottom: 1.2rem;
+}
+
+.card h5 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #0f2b3c;
+}
+
+.card p {
+  color: #475569;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+/* estados y scores */
+.status {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+  width: fit-content;
+}
+
+.status[data-status="complete"] {
+  background-color: #e3f7e7;
+  color: #0b6e3f;
+}
+
+.status[data-status="pending"] {
+  background-color: #fff3cd;
+  color: #8e6100;
+}
+
+.score {
+  background-color: #e9eff8;
+  color: #0b3b5b;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 0.3rem 1rem;
+  border-radius: 40px;
+  display: inline-block;
+  width: fit-content;
+  border: 1px solid #b8d1f0;
+}
+
+.profile-result {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0.5rem 0 1rem 0;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 40px;
+}
+
+.profile-result.apto {
+  background-color: #0b6e3f;
+  color: white;
+}
+
+.profile-result.no-apto {
+  background-color: #b91c1c;
+  color: white;
+}
+
+.btn {
+  background-color: transparent;
+  border: 2px solid #0b3b5b;
+  color: #0b3b5b;
+  padding: 0.7rem 1rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.btn:hover {
+  background-color: #0b3b5b;
+  color: white;
+}
+
+.profile-card {
+  background: linear-gradient(145deg, #ffffff, #f6faff);
+  border: 2px solid #0b3b5b20;
+}
+
+/* footer */
+footer {
+  text-align: center;
+  padding: 2rem 5%;
+  color: #5e6f88;
+  font-size: 0.9rem;
+  border-top: 1px solid #cfddee;
+  margin-top: 3rem;
+  background: white;
+}
+
+/* responsive */
+@media (max-width: 650px) {
+  .top-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  .welcome-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .nav-tianguis {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
