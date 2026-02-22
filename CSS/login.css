@@ -1,0 +1,136 @@
+/* Estilos específicos para la pantalla de login */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0b3b5b 0%, #1a5f8a 100%);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 1.5rem;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-header i {
+  font-size: 3rem;
+  color: #0b3b5b;
+  background: #e9eff8;
+  padding: 1rem;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.login-header h2 {
+  color: #0b3b5b;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.2rem;
+}
+
+.login-header p {
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.input-group label i {
+  margin-right: 0.5rem;
+  color: #0b3b5b;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  border-color: #0b3b5b;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(11, 59, 91, 0.2);
+}
+
+.input-group button {
+  width: 100%;
+  background-color: #0b3b5b;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.input-group button:hover {
+  background-color: #0f4a73;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 0.8rem;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  display: none;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.login-footer a {
+  color: #0b3b5b;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}

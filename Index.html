@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tianguis Digital · Módulo Sourcing</title>
+  <title>Portal Maestro de Contrataciones · Módulo Sourcing</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- CSS externo -->
@@ -12,26 +12,29 @@
 
 </head>
 <body>
-  <!-- CABECERA: CIUDAD DE MÉXICO / CAPITAL DE LA TRANSFORMACIÓN + TIANGUIS DIGITAL -->
+  <!-- CABECERA: CIUDAD DE MÉXICO / CAPITAL DE LA TRANSFORMACIÓN + Portal Maestro de Contrataciones -->
   <header class="top-header">
     <div class="brand-left">
       <h1>CIUDAD DE MÉXICO</h1>
       <h2>CAPITAL DE LA TRANSFORMACIÓN</h2>
     </div>
     <div class="brand-right">
-      <i class="fas fa-store" style="margin-right: 8px;"></i> TIANGUIS DIGITAL
+      <i class="fas fa-store" style="margin-right: 8px;"></i> Portal Maestro de Contrataciones
     </div>
   </header>
 
-  <!-- BARRA DE NAVEGACIÓN (Acerca de Tianguis Digital) -->
-  <nav class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200">
+  <!-- BARRA DE NAVEGACIÓN (modificada) -->
+<nav class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
       <img src="https://flowbite.com/docs/images/logo.svg" class="h-7" alt="Logo">
-      <span class="self-center text-xl text-[#0b3b5b] font-semibold whitespace-nowrap">Tianguis Digital</span>
+      <span class="self-center text-xl text-[#0b3b5b] font-semibold whitespace-nowrap">Portal Maestro de Contrataciones</span>
     </a>
-    <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-      <button type="button" class="text-white bg-[#0b3b5b] hover:bg-[#0f4a73] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Acceder</button>
+    <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center">
+      <!-- Contenedor para perfil y botón de sesión (se llenará con JS) -->
+      <div id="sessionInfo" class="flex items-center gap-3">
+        <!-- Aquí se inyectará el perfil o el botón de acceso -->
+      </div>
       <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-sticky" aria-expanded="false">
         <span class="sr-only">Abrir menú</span>
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/></svg>
@@ -52,7 +55,7 @@
     <!-- SECCIÓN BIENVENIDA -->
     <section class="welcome-section">
       <div class="welcome-text">
-        <h3>Bienvenido a Tianguis Digital</h3>
+        <h3>Bienvenido a Portal Maestro de Contrataciones</h3>
         <p>El sistema de contrataciones públicas de la Ciudad de México pone a tu disposición herramientas y módulos para registrar, conducir y monitorear los procesos de contratación pública bajo los principios de apertura, eficiencia y economía para asegurar mejores bienes y servicios para todos.</p>
       </div>
       <button class="discover-btn" onclick="alert('Explora los módulos disponibles.')">Descubre <i class="fas fa-arrow-right"></i></button>
@@ -125,7 +128,7 @@
   </main>
 
   <footer>
-    <p>Tianguis Digital · Ciudad de México · Contrataciones abiertas y eficientes</p>
+    <p>Portal Maestro de Contrataciones · Ciudad de México · Contrataciones abiertas y eficientes</p>
     <p style="margin-top: 0.5rem; font-size: 0.8rem;">Módulo Sourcing · Diseño apegado a imagen oficial</p>
   </footer>
 
