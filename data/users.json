@@ -1,12 +1,17 @@
 [
   {
-    "username": "publico",
-    "password": "publico123",
-    "perfil": "publico"
+    "username": "proveedor_pub",
+    "password": "proveedor123",
+    "perfil": "proveedor_publico"
+  },
+  {
+    "username": "institucion_pub",
+    "password": "institucion123",
+    "perfil": "institucion_publica"
   },
   {
     "username": "privado",
     "password": "privado123",
-    "perfil": "privado"
+    "perfil": "proveedor_privado"
   }
 ]

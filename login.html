@@ -8,42 +8,55 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Estilos propios del login -->
   <link rel="stylesheet" href="CSS/login.css">
-  <!-- Tailwind (opcional, para agilizar) -->
+  <!-- Tailwind (opcional) -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
   <div class="login-container">
-    <div class="login-card">
+    <!-- Paso 1: Selección de tipo de contratación -->
+    <div class="login-card" id="step1">
       <div class="login-header">
         <i class="fas fa-store"></i>
         <h2>Portal Maestro de Contrataciones</h2>
-        <p>Acceso al Módulo Sourcing</p>
+        <p>¿Qué tipo de contratación te interesa?</p>
       </div>
+      <div class="flex flex-col gap-4">
+        <button id="btnPublica" class="bg-[#0b3b5b] text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-[#0f4a73] transition">
+          CONTRATACIÓN PÚBLICA
+        </button>
+        <button id="btnPrivada" class="bg-[#1a5f8a] text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-[#0f4a73] transition">
+          CONTRATACIÓN PRIVADA
+        </button>
+      </div>
+    </div>
 
+    <!-- Paso 2: Formulario de login (oculto inicialmente) -->
+    <div class="login-card hidden" id="step2">
+      <div class="login-header">
+        <i class="fas fa-store"></i>
+        <h2>Portal Maestro de Contrataciones</h2>
+        <p id="tipoSeleccionado">Contratación Pública</p>
+      </div>
       <form id="loginForm">
         <div class="input-group">
           <label for="username"><i class="fas fa-user"></i> Usuario</label>
-          <input type="text" id="username" name="username" placeholder="ej. publico" required>
+          <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required>
         </div>
-
         <div class="input-group">
           <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
           <input type="password" id="password" name="password" placeholder="••••••••" required>
         </div>
-
         <div class="input-group">
           <button type="submit" id="loginBtn">
             <i class="fas fa-sign-in-alt"></i> Iniciar sesión
           </button>
         </div>
-
         <div id="errorMessage" class="error-message"></div>
       </form>
-
-      <div class="login-footer">
-        <p>Cuentas de prueba:</p>
-        <p><strong>público</strong> (público123) / <strong>privado</strong> (privado123)</p>
-        <a href="index.html">← Volver al inicio</a>
+      <div class="text-center mt-4">
+        <button id="btnVolver" class="text-[#0b3b5b] hover:underline">
+          <i class="fas fa-arrow-left"></i> Volver a seleccionar tipo
+        </button>
       </div>
     </div>
   </div>
