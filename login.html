@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Estilos propios del login -->
   <link rel="stylesheet" href="CSS/login.css">
-  <!-- Tailwind (opcional) -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
@@ -27,10 +27,13 @@
         <button id="btnPrivada" class="bg-[#1a5f8a] text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-[#0f4a73] transition">
           CONTRATACIÓN PRIVADA
         </button>
+        <button id="btnRegistro" class="bg-green-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-green-700 transition mt-4">
+          <i class="fas fa-user-plus"></i> ¿Nuevo usuario? Regístrate
+        </button>
       </div>
     </div>
 
-    <!-- Paso 2: Formulario de login (oculto inicialmente) -->
+    <!-- Paso 2: Formulario de login -->
     <div class="login-card hidden" id="step2">
       <div class="login-header">
         <i class="fas fa-store"></i>
@@ -39,8 +42,8 @@
       </div>
       <form id="loginForm">
         <div class="input-group">
-          <label for="username"><i class="fas fa-user"></i> Usuario</label>
-          <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required>
+          <label for="username"><i class="fas fa-user"></i> Correo electrónico</label>
+          <input type="email" id="username" name="username" placeholder="ejemplo@correo.com" required>
         </div>
         <div class="input-group">
           <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
@@ -56,6 +59,52 @@
       <div class="text-center mt-4">
         <button id="btnVolver" class="text-[#0b3b5b] hover:underline">
           <i class="fas fa-arrow-left"></i> Volver a seleccionar tipo
+        </button>
+        <button id="btnIrRegistro" class="text-green-600 hover:underline ml-4">
+          <i class="fas fa-user-plus"></i> Registrarse
+        </button>
+      </div>
+    </div>
+
+    <!-- Paso 3: Formulario de registro -->
+    <div class="login-card hidden" id="step3">
+      <div class="login-header">
+        <i class="fas fa-user-plus"></i>
+        <h2>Registro de Usuario</h2>
+        <p>Crea tu cuenta en el Portal Maestro de Contrataciones</p>
+      </div>
+      <form id="registerForm">
+        <div class="input-group">
+          <label for="regEmail"><i class="fas fa-envelope"></i> Correo electrónico</label>
+          <input type="email" id="regEmail" name="regEmail" placeholder="ejemplo@correo.com" required>
+        </div>
+        <div class="input-group">
+          <label for="regPassword"><i class="fas fa-lock"></i> Contraseña</label>
+          <input type="password" id="regPassword" name="regPassword" placeholder="Mínimo 6 caracteres" required>
+        </div>
+        <div class="input-group">
+          <label for="regTelefono"><i class="fas fa-phone"></i> Teléfono</label>
+          <input type="tel" id="regTelefono" name="regTelefono" placeholder="10 dígitos numéricos" required>
+        </div>
+        <div class="input-group">
+          <label for="regTipoUsuario"><i class="fas fa-user-tag"></i> Tipo de usuario</label>
+          <select id="regTipoUsuario" name="regTipoUsuario" required class="w-full p-2 border rounded">
+            <option value="">Selecciona un tipo</option>
+            <option value="proveedor">Proveedor</option>
+            <option value="institucion_publica">Institución Pública</option>
+            <option value="privado">Usuario Privado</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <button type="submit" id="registerBtn">
+            <i class="fas fa-user-check"></i> Registrarse
+          </button>
+        </div>
+        <div id="registerMessage" class="error-message"></div>
+      </form>
+      <div class="text-center mt-4">
+        <button id="btnVolverLogin" class="text-[#0b3b5b] hover:underline">
+          <i class="fas fa-arrow-left"></i> Volver al inicio de sesión
         </button>
       </div>
     </div>

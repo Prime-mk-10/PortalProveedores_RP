@@ -1,195 +1,193 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // ========== CONTROL DE SESIÓN ==========
-  const perfil = sessionStorage.getItem('tianguis_perfil');
-  const usuario = sessionStorage.getItem('tianguis_usuario');
-
-  if (!perfil) {
-    window.location.href = 'login.html';
-    return;
-  }
-
-  // ========== DATOS POR PERFIL ==========
-  const perfilesData = {
-    proveedor_publico: {
-      tipo: 'Proveedor',
-      nombre: 'CONSTRUCTORA ÁGUILA, S.A. DE C.V.',
-      rfc: 'CAAG1234567A1',
-      bienvenida: 'Bienvenido, proveedor del sector público',
-      modulos: [
-        { id: 'sourcing', nombre: 'Sourcing', descripcion: 'Gestión de admisión y evaluación', icono: 'fa-search' },
-        { id: 'automatizacion', nombre: 'Automatización', descripcion: 'Procesos automatizados', icono: 'fa-robot' },
-        { id: 'concierge', nombre: 'Concierge', descripcion: 'Atención personalizada', icono: 'fa-concierge-bell' },
-        { id: 'legal', nombre: 'Legal', descripcion: 'Contratos y aspectos legales', icono: 'fa-gavel' },
-        { id: 'financiamiento', nombre: 'Financiamiento', descripcion: 'Opciones de financiamiento', icono: 'fa-coins' },
-        { id: 'business_intelligence', nombre: 'Business Intelligence', descripcion: 'Análisis de datos', icono: 'fa-chart-pie' },
-        { id: 'capacitacion', nombre: 'Capacitación', descripcion: 'Cursos y formación', icono: 'fa-chalkboard-teacher' },
-        { id: 'compliance', nombre: 'Compliance', descripcion: 'Cumplimiento normativo', icono: 'fa-shield-alt' },
-        { id: 'marketplace', nombre: 'Market Place', descripcion: 'Tienda digital', icono: 'fa-store' },
-        { id: 'bienestar', nombre: 'Bienestar y Protección', descripcion: 'Beneficios para empleados', icono: 'fa-heart' }
-      ]
-    },
-    institucion_publica: {
-      tipo: 'Institución',
-      nombre: 'SECRETARÍA DE OBRAS PÚBLICAS',
-      rfc: 'SOP1234567XX',
-      bienvenida: 'Bienvenido, institución pública',
-      modulos: [
-        { id: 'sourcing', nombre: 'Sourcing', descripcion: 'Gestión de admisión y evaluación', icono: 'fa-search' },
-        { id: 'automatizacion', nombre: 'Automatización', descripcion: 'Procesos automatizados', icono: 'fa-robot' },
-        { id: 'concierge', nombre: 'Concierge', descripcion: 'Atención personalizada', icono: 'fa-concierge-bell' },
-        { id: 'financiamiento', nombre: 'Financiamiento', descripcion: 'Opciones de financiamiento', icono: 'fa-coins' },
-        { id: 'business_intelligence', nombre: 'Business Intelligence', descripcion: 'Análisis de datos', icono: 'fa-chart-pie' },
-        { id: 'capacitacion', nombre: 'Capacitación', descripcion: 'Cursos y formación', icono: 'fa-chalkboard-teacher' },
-        { id: 'compliance', nombre: 'Compliance', descripcion: 'Cumplimiento normativo', icono: 'fa-shield-alt' },
-        { id: 'marketplace', nombre: 'Market Place', descripcion: 'Tienda digital', icono: 'fa-store' },
-        { id: 'bienestar', nombre: 'Bienestar y Protección', descripcion: 'Beneficios para empleados', icono: 'fa-heart' }
-      ]
-    },
-    proveedor_privado: {
-      tipo: 'Proveedor Privado',
-      nombre: 'DESARROLLOS URBANOS PRIVADOS, S.A. DE C.V.',
-      rfc: 'DUP9876543YZ',
-      bienvenida: 'Bienvenido, proveedor del sector privado',
-      modulos: [
-        { id: 'sourcing', nombre: 'Sourcing', descripcion: 'Gestión de admisión y evaluación', icono: 'fa-search' },
-        { id: 'automatizacion', nombre: 'Automatización', descripcion: 'Procesos automatizados', icono: 'fa-robot' },
-        { id: 'financiamiento', nombre: 'Financiamiento', descripcion: 'Opciones de financiamiento', icono: 'fa-coins' },
-        { id: 'compliance', nombre: 'Compliance', descripcion: 'Cumplimiento normativo', icono: 'fa-shield-alt' },
-        { id: 'capacitacion', nombre: 'Capacitación', descripcion: 'Cursos y formación', icono: 'fa-chalkboard-teacher' },
-        { id: 'marketplace', nombre: 'Market Place', descripcion: 'Tienda digital', icono: 'fa-store' }
-      ]
-    }
-  };
-
-  // ========== ELEMENTOS DEL DOM ==========
-  const navMenu = document.getElementById('navMenu');
-  const welcomeH3 = document.querySelector('.welcome-text h3');
-  const infoUsuario = document.getElementById('infoUsuario');
-  const sessionInfoDiv = document.getElementById('sessionInfo');
-  const contenidoModulo = document.getElementById('contenidoModulo');
-
-  // Variable para llevar el módulo activo
-  let moduloActivoId = null;
-
-  // ========== CARGAR MÓDULOS EN EL MENÚ ==========
-  function cargarMenuModulos(perfilUsuario) {
-    const data = perfilesData[perfilUsuario];
-    if (!data || !navMenu) return;
-
-    navMenu.innerHTML = '';
-
-    data.modulos.forEach(modulo => {
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = '#';
-      // Clases mejoradas: en móvil fondo hover, en desktop padding reducido y hover con fondo suave
-      a.className = 'block py-2 px-3 text-gray-700 rounded hover:bg-gray-100 md:px-3 md:py-1.5 md:hover:bg-blue-50 md:hover:text-[#0b3b5b] transition-colors duration-200';
-      a.setAttribute('data-modulo', modulo.id);
-      a.innerHTML = `<i class="fas ${modulo.icono} mr-1.5 text-sm"></i>${modulo.nombre}`;
-      
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Quitar clase activa del anterior
-        if (moduloActivoId) {
-          const anterior = document.querySelector(`a[data-modulo="${moduloActivoId}"]`);
-          if (anterior) {
-            anterior.classList.remove('active-modulo');
-          }
-        }
-        // Agregar clase activa al actual
-        a.classList.add('active-modulo');
-        moduloActivoId = modulo.id;
-        mostrarContenidoModulo(modulo);
-      });
-
-      li.appendChild(a);
-      navMenu.appendChild(li);
-    });
-
-    // Opcional: seleccionar el primer módulo por defecto
-    if (data.modulos.length > 0) {
-      const primerModulo = data.modulos[0];
-      const primerEnlace = document.querySelector(`a[data-modulo="${primerModulo.id}"]`);
-      if (primerEnlace) {
-        primerEnlace.classList.add('active-modulo');
-        moduloActivoId = primerModulo.id;
-        mostrarContenidoModulo(primerModulo);
-      }
-    }
-  }
-
-  // ========== MOSTRAR CONTENIDO DEL MÓDULO SELECCIONADO ==========
-  function mostrarContenidoModulo(modulo) {
-    if (contenidoModulo) {
-      contenidoModulo.innerHTML = `
-        <h5 class="text-2xl font-bold text-[#0b3b5b] mb-4">
-          <i class="fas ${modulo.icono} mr-2"></i>${modulo.nombre}
-        </h5>
-        <p class="text-gray-700">${modulo.descripcion}</p>
-        <p class="text-gray-500 mt-4">Contenido en desarrollo. Aquí se mostrarán las funcionalidades del módulo.</p>
-      `;
-    }
-  }
-
-  // ========== ACTUALIZAR INTERFAZ DE SESIÓN ==========
-  function actualizarInfoSesion() {
-    if (sessionInfoDiv) {
-      if (perfil && usuario) {
-        let nombrePerfil = '';
-        if (perfil === 'proveedor_publico') nombrePerfil = 'Proveedor Público';
-        else if (perfil === 'institucion_publica') nombrePerfil = 'Institución Pública';
-        else if (perfil === 'proveedor_privado') nombrePerfil = 'Proveedor Privado';
-        else nombrePerfil = perfil;
-
-        sessionInfoDiv.innerHTML = `
-          <span class="text-xs md:text-sm text-gray-700 bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1">
-            <i class="fas fa-user-circle"></i> <span class="hidden sm:inline">${usuario}</span> <span class="text-[0.7rem] text-gray-500">(${nombrePerfil})</span>
-          </span>
-          <button id="logoutBtn" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5">
-            <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Salir</span>
-          </button>
-        `;
-        document.getElementById('logoutBtn').addEventListener('click', cerrarSesion);
-      } else {
-        sessionInfoDiv.innerHTML = `
-          <a href="login.html" class="text-white bg-[#0b3b5b] hover:bg-[#0f4a73] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5">
-            <i class="fas fa-sign-in-alt"></i> Acceder
-          </a>
-        `;
-      }
-    }
-  }
-
-  function cerrarSesion() {
-    sessionStorage.removeItem('tianguis_perfil');
-    sessionStorage.removeItem('tianguis_usuario');
-    window.location.href = 'login.html';
-  }
-
-  // ========== INICIALIZACIÓN ==========
-  function inicializar() {
-    const data = perfilesData[perfil];
-    if (data) {
-      welcomeH3.textContent = data.bienvenida;
-      infoUsuario.innerHTML = `<i class="fas fa-building"></i> ${data.tipo}: ${data.nombre} • RFC: ${data.rfc}`;
-      cargarMenuModulos(perfil);
-    }
-    actualizarInfoSesion();
-  }
-
-  // Agregar estilos para módulo activo (se puede poner en CSS también)
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .active-modulo {
-      background-color: #e9eff8 !important;
-      color: #0b3b5b !important;
-      font-weight: 500;
-    }
-    .md .active-modulo {
-      background-color: #e9eff8 !important;
-    }
-  `;
-  document.head.appendChild(style);
-
-  inicializar();
+// Cargar datos del usuario al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    await cargarDatosUsuario();
 });
+
+async function cargarDatosUsuario() {
+    try {
+        const response = await fetch('get_user_data.php');
+        const data = await response.json();
+        
+        if (data.success) {
+            // Mostrar información del usuario
+            const infoUsuario = document.getElementById('infoUsuario');
+            const sessionInfo = document.getElementById('sessionInfo');
+            
+            let rolTexto = '';
+            switch(data.rol) {
+                case 'proveedor':
+                    rolTexto = 'Proveedor';
+                    break;
+                case 'institucion_publica':
+                    rolTexto = 'Institución Pública';
+                    break;
+                case 'privado':
+                    rolTexto = 'Usuario Privado';
+                    break;
+                default:
+                    rolTexto = data.rol;
+            }
+            
+            infoUsuario.innerHTML = `
+                <i class="fas fa-user-circle"></i> 
+                <strong>${rolTexto}</strong> · ${data.email}
+                <span class="ml-2 text-sm bg-blue-100 px-2 py-1 rounded">
+                    ${data.tipo_contratacion === 'publica' ? 'Contratación Pública' : 'Contratación Privada'}
+                </span>
+            `;
+            
+            sessionInfo.innerHTML = `
+                <span class="text-sm text-gray-700">${data.email}</span>
+                <a href="logout.php" class="text-red-600 hover:text-red-800 ml-2">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+            `;
+            
+            // Configurar menú según el rol
+            configurarMenu(data.rol);
+        } else {
+            // No autenticado, redirigir al login
+            window.location.href = 'login.html';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        window.location.href = 'login.html';
+    }
+}
+
+function configurarMenu(rol) {
+    const navMenu = document.getElementById('navMenu');
+    if (!navMenu) return;
+    
+    let menuItems = [];
+    
+    // Configurar menú según el rol
+    switch(rol) {
+        case 'proveedor':
+            menuItems = [
+                { nombre: 'Mi Perfil', icono: 'fa-user', id: 'perfil' },
+                { nombre: 'Registrar Solicitud', icono: 'fa-file-signature', id: 'solicitud' },
+                { nombre: 'Mis Solicitudes', icono: 'fa-folder-open', id: 'mis_solicitudes' },
+                { nombre: 'Documentos', icono: 'fa-file-alt', id: 'documentos' }
+            ];
+            break;
+        case 'institucion_publica':
+            menuItems = [
+                { nombre: 'Dashboard', icono: 'fa-chart-line', id: 'dashboard' },
+                { nombre: 'Revisar Solicitudes', icono: 'fa-clipboard-list', id: 'revisar' },
+                { nombre: 'Contratos Activos', icono: 'fa-file-contract', id: 'contratos' },
+                { nombre: 'Estadísticas', icono: 'fa-chart-bar', id: 'estadisticas' }
+            ];
+            break;
+        case 'privado':
+            menuItems = [
+                { nombre: 'Mi Cuenta', icono: 'fa-user', id: 'cuenta' },
+                { nombre: 'Consultar Licitaciones', icono: 'fa-search', id: 'consultar' },
+                { nombre: 'Notificaciones', icono: 'fa-bell', id: 'notificaciones' }
+            ];
+            break;
+        default:
+            menuItems = [];
+    }
+    
+    // Generar menú
+    navMenu.innerHTML = menuItems.map(item => `
+        <li>
+            <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#0b3b5b] md:p-0" data-modulo="${item.id}">
+                <i class="fas ${item.icono} mr-2"></i> ${item.nombre}
+            </a>
+        </li>
+    `).join('');
+    
+    // Agregar event listeners a los items del menú
+    document.querySelectorAll('[data-modulo]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const modulo = link.getAttribute('data-modulo');
+            cargarModulo(modulo);
+        });
+    });
+}
+
+function cargarModulo(modulo) {
+    const contenidoDiv = document.getElementById('contenidoModulo');
+    if (!contenidoDiv) return;
+    
+    let contenido = '';
+    
+    switch(modulo) {
+        case 'perfil':
+            contenido = `
+                <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Mi Perfil</h2>
+                <p class="text-gray-600">Aquí puedes ver y editar la información de tu perfil.</p>
+                <div class="mt-4 p-4 bg-gray-50 rounded">
+                    <p><strong>Correo:</strong> ${sessionStorage.getItem('user_email') || 'Cargando...'}</p>
+                    <p><strong>Rol:</strong> ${sessionStorage.getItem('user_rol') || 'Cargando...'}</p>
+                </div>
+            `;
+            break;
+        case 'solicitud':
+            contenido = `
+                <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Registrar Solicitud</h2>
+                <p class="text-gray-600">Formulario para registrar una nueva solicitud de contratación.</p>
+                <form class="mt-4">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Título de la solicitud</label>
+                        <input type="text" class="w-full p-2 border rounded" placeholder="Ej: Adquisición de equipo médico">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Descripción</label>
+                        <textarea class="w-full p-2 border rounded" rows="4"></textarea>
+                    </div>
+                    <button class="bg-[#0b3b5b] text-white px-4 py-2 rounded hover:bg-[#0f4a73]">
+                        Enviar Solicitud
+                    </button>
+                </form>
+            `;
+            break;
+        case 'mis_solicitudes':
+            contenido = `
+                <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Mis Solicitudes</h2>
+                <p class="text-gray-600">Listado de tus solicitudes de contratación.</p>
+                <div class="mt-4">
+                    <p class="text-gray-500">No hay solicitudes registradas.</p>
+                </div>
+            `;
+            break;
+        case 'dashboard':
+            contenido = `
+                <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Dashboard</h2>
+                <p class="text-gray-600">Panel de control con indicadores clave.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div class="bg-blue-50 p-4 rounded">
+                        <h3 class="font-bold">Solicitudes Pendientes</h3>
+                        <p class="text-2xl">12</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded">
+                        <h3 class="font-bold">Contratos Activos</h3>
+                        <p class="text-2xl">8</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded">
+                        <h3 class="font-bold">Proveedores Registrados</h3>
+                        <p class="text-2xl">45</p>
+                    </div>
+                </div>
+            `;
+            break;
+        case 'revisar':
+            contenido = `
+                <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Revisar Solicitudes</h2>
+                <p class="text-gray-600">Listado de solicitudes pendientes de revisión.</p>
+                <div class="mt-4">
+                    <p class="text-gray-500">No hay solicitudes pendientes.</p>
+                </div>
+            `;
+            break;
+        default:
+            contenido = `
+                <p class="text-gray-600">Módulo en construcción. Próximamente más funcionalidades.</p>
+            `;
+    }
+    
+    contenidoDiv.innerHTML = contenido;
+}
