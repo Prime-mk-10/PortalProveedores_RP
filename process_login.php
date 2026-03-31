@@ -48,8 +48,8 @@ $rol = $user['rol_nombre'];
 $tipo_valido = false;
 
 if ($tipo_contratacion === 'publica') {
-    // Contratación pública: solo proveedores e instituciones públicas
-    $tipo_valido = in_array($rol, ['proveedor', 'institucion_publica']);
+    // Contratación pública: solo Ofertantes e instituciones públicas
+    $tipo_valido = in_array($rol, ['Ofertante', 'institucion_publica']);
 } else if ($tipo_contratacion === 'privada') {
     // Contratación privada: solo usuarios privados
     $tipo_valido = ($rol === 'privado');

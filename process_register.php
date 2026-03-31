@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 $telefono = trim($_POST['telefono'] ?? '');
-$tipo_usuario = $_POST['tipo_usuario'] ?? ''; // proveedor, institucion_publica, privado
+$tipo_usuario = $_POST['tipo_usuario'] ?? ''; // Ofertante, institucion_publica, privado
 
 // Validaciones
 if (empty($email) || empty($password) || empty($telefono) || empty($tipo_usuario)) {
@@ -38,7 +38,7 @@ if (strlen($password) < 6) {
 }
 
 // Validar tipo de usuario
-$roles_validos = ['proveedor', 'institucion_publica', 'privado'];
+$roles_validos = ['Ofertante', 'institucion_publica', 'privado'];
 if (!in_array($tipo_usuario, $roles_validos)) {
     echo json_encode(['success' => false, 'message' => 'Tipo de usuario no válido']);
     exit;

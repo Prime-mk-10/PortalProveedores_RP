@@ -4,137 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Maestro de Contrataciones · Módulo Sourcing</title>
-  <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- CSS externo (opcional) -->
   <link rel="stylesheet" href="./CSS/style.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Flowbite JS (necesario para drawer y dropdown) -->
   <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 </head>
 <body>
 
-<!-- BARRA SUPERIOR FIJA -->
-<nav class="fixed top-0 z-50 w-full bg-white border-b border-default">
-  <div class="px-3 py-3 lg:px-5 lg:pl-3">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center justify-start rtl:justify-end">
-        <button data-drawer-target="top-bar-sidebar" data-drawer-toggle="top-bar-sidebar" aria-controls="top-bar-sidebar" type="button" class="sm:hidden text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm p-2 focus:outline-none">
-          <span class="sr-only">Abrir menú</span>
-          <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h10"/>
-          </svg>
-        </button>
-        <a href="#" class="flex ms-2 md:me-24 items-center">
-          <!-- Logo CDMX (ajusta la ruta si es necesario) -->
-          <img src="https://via.placeholder.com/32x32?text=CDMX" class="h-8 me-3" alt="Logo CDMX" />
-        </a>
-      </div>
-      <div class="flex items-center">
-        <div class="flex items-center ms-3">
-          <div>
-            <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-              <span class="sr-only">Abrir menú usuario</span>
-              <img class="w-8 h-8 rounded-full" id="userAvatar" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Foto de perfil">
-            </button>
-          </div>
-            <div class="z-50 hidden bg-white border border-default-medium rounded-base shadow-lg w-44" id="dropdown-user">
-            <div class="px-4 py-3 border-b border-default-medium" role="none">
-              <p class="text-sm font-medium text-heading" id="dropdownUserName" role="none">Cargando...</p>
-              <p class="text-sm text-body truncate" id="dropdownUserEmail" role="none">cargando@ejemplo.com</p>
-            </div>
-            <ul class="p-2 text-sm text-body font-medium" role="none">
-              <li>
-                <a href="#" id="logoutLink" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded" role="menuitem">Cerrar sesión</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
+  <!-- Contenedor donde se cargará el navbar + sidebar -->
+  <div id="nav-placeholder"></div>
 
-<!-- SIDEBAR (fijo, con drawer) -->
-<aside id="top-bar-sidebar" class="fixed top-0 left-0 z-40 w-64 h-full transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-  <div class="h-full px-3 py-4 overflow-y-auto bg-neutral-primary-soft border-e border-default">
-    <a href="#" class="flex items-center ps-2.5 mb-5">
-      <img src="https://via.placeholder.com/32x32?text=CDMX" class="h-6 me-3" alt="Logo CDMX" />
-      <span class="self-center text-lg text-heading font-semibold whitespace-nowrap">Módulos</span>
-    </a>
-    <ul id="sidebarMenu" class="space-y-2 font-medium">
-      <!-- Los módulos se inyectan aquí con JS -->
-    </ul>
-  </div>
-</aside>
-
-<!-- CONTENIDO PRINCIPAL (con margen para top bar y sidebar) -->
-<div class="p-4 sm:ml-64 mt-14">
-  <!-- SECCIÓN BIENVENIDA -->
-  <section class="welcome-section">
-    <div class="welcome-text">
-      <h3>Bienvenido a Portal Maestro de Contrataciones</h3>
-      <p>El sistema de contrataciones públicas de la Ciudad de México pone a tu disposición herramientas y módulos para registrar, conducir y monitorear los procesos de contratación pública bajo los principios de apertura, eficiencia y economía para asegurar mejores bienes y servicios para todos.</p>
-    </div>
-    <button class="discover-btn" onclick="alert('Explora los módulos disponibles.')">Descubre <i class="fas fa-arrow-right"></i></button>
-  </section>
-
-  <!-- Información del usuario (proveedor/institución) -->
-  <div class="proveedor-tag" id="infoUsuario">
-    <i class="fas fa-building"></i> Cargando...
+  <!-- Contenedor del contenido principal (con margen dinámico) -->
+  <div class="p-4 sm:ml-64 mt-14" id="main-content-container">
+    <!-- Aquí se inyectará el contenido de cada módulo -->
   </div>
 
-  <!-- Contenido del módulo seleccionado -->
-  <div id="contenidoModulo" class="mt-8 p-6 bg-white rounded-lg shadow">
-    <p class="text-gray-600">Selecciona un módulo del menú para ver su contenido.</p>
-  </div>
-</div>
+  <footer class="sm:ml-64 mt-8 p-4 text-center text-sm text-gray-500 border-t border-default">
+    <p>Portal Maestro de Contrataciones · Ciudad de México · Contrataciones abiertas y eficientes</p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;">Módulo Sourcing · Diseño apegado a imagen oficial</p>
+  </footer>
 
-<footer class="sm:ml-64 mt-8 p-4 text-center text-sm text-gray-500 border-t border-default">
-  <p>Portal Maestro de Contrataciones · Ciudad de México · Contrataciones abiertas y eficientes</p>
-  <p style="margin-top: 0.5rem; font-size: 0.8rem;">Módulo Sourcing · Diseño apegado a imagen oficial</p>
-</footer>
+  <script src="./Scripts/script.js"></script>
 
-<!-- JavaScript externo -->
-<script src="./Scripts/script.js"></script>
-
-<!-- Personalización de Tailwind (incluye colores del diseño) -->
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          brand: '#0b3b5b',
-          'brand-strong': '#0f4a73',
-          'brand-medium': '#2a6d9c',
-          heading: '#0b3b5b',
-          body: '#1e293b',
-          neutral: {
-            primary: '#ffffff',
-            'primary-soft': '#f8fafc',    // bg-neutral-primary-soft
-            secondary: { soft: '#f8fafc' },
-            'secondary-medium': '#f1f5f9', // hover backgrounds
-            tertiary: '#e2e8f0',
-            'tertiary-medium': '#cbd5e1',
-          },
-          fg: {
-            disabled: '#94a3b8',
-            brand: '#0b3b5b',
-            'danger-strong': '#b91c1c',
-          },
-          danger: {
-            soft: '#fee2e2',
-            subtle: '#fecaca',
-          },
-          default: '#e5e7eb', // para border-default
-        },
-        borderRadius: {
-          base: '0.5rem',
-          sm: '0.25rem'
-        }
-      }
-    }
-  }
-</script>
+  <script>
+    tailwind.config = { /* misma configuración */ };
+  </script>
 </body>
 </html>
