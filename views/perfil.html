@@ -1,8 +1,57 @@
 <div>
   <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Mi Perfil</h2>
-  <p class="text-gray-600">Aquí puedes ver y editar la información de tu perfil.</p>
-  <div class="mt-4 p-4 bg-gray-50 rounded">
-    <p><strong>Correo:</strong> <span id="perfil-email">Cargando...</span></p>
-    <p><strong>Rol:</strong> <span id="perfil-rol">Cargando...</span></p>
+
+  <!-- Contenedor para ofertantes -->
+  <div id="ofertante-section" style="display: none;">
+    <div class="mb-6">
+      <label class="block text-gray-700 font-medium mb-2">Tipo de proveedor:</label>
+      <select id="tipoProveedor" class="border rounded px-3 py-2 w-64">
+        <option value="">-- Selecciona --</option>
+        <option value="fisica_empresarial">Persona Física con Actividad Empresarial</option>
+        <option value="moral">Persona Moral</option>
+      </select>
+    </div>
+
+    <!-- Formulario dinámico (se llena vía JS) -->
+    <form id="proveedorForm" class="space-y-4">
+      <!-- Los campos se generarán dinámicamente según el tipo -->
+      <div id="formCampos"></div>
+      <div class="flex gap-4 mt-4">
+        <button type="submit" class="bg-[#0b3b5b] text-white px-6 py-2 rounded hover:bg-[#0f4a73]">Guardar</button>
+        <button type="button" id="cancelarForm" class="bg-gray-300 px-6 py-2 rounded">Cancelar</button>
+      </div>
+      <div id="formMessage" class="mt-2 text-sm"></div>
+    </form>
+  </div>
+
+  <!-- Contenedor para otros roles (Alta General) -->
+  <div id="general-section" style="display: none;">
+    <form id="generalForm" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label>RFC:</label><input type="text" name="rfc" class="w-full border p-2 rounded" required></div>
+        <div><label>Razón Social:</label><input type="text" name="razon_social" class="w-full border p-2 rounded" required></div>
+        <div><label>Régimen Fiscal:</label><input type="text" name="regimen_fiscal" class="w-full border p-2 rounded" required></div>
+        <div><label>Vialidad:</label><input type="text" name="nombre_vialidad" class="w-full border p-2 rounded"></div>
+        <div><label>Núm. Exterior:</label><input type="text" name="num_exterior" class="w-full border p-2 rounded"></div>
+        <div><label>Núm. Interior:</label><input type="text" name="num_interior" class="w-full border p-2 rounded"></div>
+        <div><label>Colonia:</label><input type="text" name="colonia" class="w-full border p-2 rounded"></div>
+        <div><label>Localidad:</label><input type="text" name="localidad" class="w-full border p-2 rounded"></div>
+        <div><label>Código Postal:</label><input type="text" name="codigo_postal" class="w-full border p-2 rounded"></div>
+        <div><label>Ciudad:</label><input type="text" name="ciudad" class="w-full border p-2 rounded"></div>
+        <div><label>Estado:</label><input type="text" name="estado" class="w-full border p-2 rounded"></div>
+        <div><label>Teléfono:</label><input type="text" name="telefono" class="w-full border p-2 rounded"></div>
+        <div><label>Extensión:</label><input type="text" name="extension" class="w-full border p-2 rounded"></div>
+        <div><label>Fax:</label><input type="text" name="fax" class="w-full border p-2 rounded"></div>
+        <div><label>Ext. Fax:</label><input type="text" name="fax_extension" class="w-full border p-2 rounded"></div>
+        <div><label>Representante Legal:</label><input type="text" name="representante_legal" class="w-full border p-2 rounded"></div>
+        <div><label>Email:</label><input type="email" name="email" class="w-full border p-2 rounded" required></div>
+        <div><label>Banco:</label><input type="text" name="banco" class="w-full border p-2 rounded"></div>
+        <div><label>Sucursal Bancaria:</label><input type="text" name="sucursal_bancaria" class="w-full border p-2 rounded"></div>
+        <div><label>Cuenta:</label><input type="text" name="cuenta_bancaria" class="w-full border p-2 rounded"></div>
+        <div><label>CLABE:</label><input type="text" name="clabe_interbancaria" class="w-full border p-2 rounded"></div>
+      </div>
+      <button type="submit" class="bg-[#0b3b5b] text-white px-6 py-2 rounded">Guardar Alta General</button>
+      <div id="generalMessage" class="mt-2 text-sm"></div>
+    </form>
   </div>
 </div>
