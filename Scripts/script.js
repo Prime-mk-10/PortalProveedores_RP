@@ -16,47 +16,65 @@ async function cargarNav() {
         const html = await response.text();
         document.getElementById('nav-placeholder').innerHTML = html;
         
-        // Esperar un momento para que Flowbite procese el DOM
-        setTimeout(() => {
-            // Reinicializar Flowbite después de cargar el navbar
-            if (typeof Flowbite !== 'undefined') {
-                // Forzar reinicialización de todos los componentes
-                document.querySelectorAll('[data-dropdown-toggle]').forEach(el => {
-                    const dropdownId = el.getAttribute('data-dropdown-toggle');
-                    const dropdownEl = document.getElementById(dropdownId);
-                    if (dropdownEl && dropdownEl.getAttribute('data-flowbite-initialized') === 'true') {
-                        dropdownEl.removeAttribute('data-flowbite-initialized');
-                    }
-                });
-            }
-            
-            // Inicializar manualmente el dropdown del usuario
-            inicializarDropdownUsuario();
-        }, 100);
+        // Esperar a que Flowbite esté disponible y luego reinicializar componentes
+        await waitForFlowbite();
+        initFlowbiteComponents();
     } catch (error) {
         console.error('Error cargando la navegación:', error);
     }
 }
 
-// Función separada para inicializar el dropdown del usuario
-function inicializarDropdownUsuario() {
-    const userButton = document.getElementById('dropdownUserButton');
-    const userDropdown = document.getElementById('dropdownUser');
+function waitForFlowbite() {
+    return new Promise((resolve) => {
+        if (typeof Flowbite !== 'undefined') {
+            resolve();
+        } else {
+            const checkInterval = setInterval(() => {
+                if (typeof Flowbite !== 'undefined') {
+                    clearInterval(checkInterval);
+                    resolve();
+                }
+            }, 50);
+        }
+    });
+}
+
+function initFlowbiteComponents() {
+    // Destruir instancias existentes si es necesario
+    if (window.FlowbiteInstances) {
+        window.FlowbiteInstances.forEach(instance => instance.destroy());
+    }
+    
+    // Reinicializar todos los dropdowns y componentes
+    if (typeof Flowbite !== 'undefined') {
+        // Forzar reinicialización
+        Flowbite.init();
+    }
+    
+    // También podemos inicializar manualmente el dropdown de usuario si falla Flowbite
+    // pero como fallback
+    setTimeout(() => {
+        const userButton = document.getElementById('dropdownUserButton');
+        if (userButton && !userButton.hasAttribute('data-flowbite-initialized')) {
+            // Fallback manual solo si Flowbite no lo hizo
+            inicializarDropdownUsuarioManual();
+        }
+    }, 200);
+}
+
+function inicializarDropdownUsuarioManual() {
+    const userButton = document.querySelector('[data-dropdown-toggle="dropdown-user"]');
+    const userDropdown = document.getElementById('dropdown-user');
     
     if (userButton && userDropdown) {
-        // Remover cualquier event listener anterior
-        const newUserButton = userButton.cloneNode(true);
-        userButton.parentNode.replaceChild(newUserButton, userButton);
-        
-        newUserButton.addEventListener('click', function(e) {
+        userButton.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             userDropdown.classList.toggle('hidden');
         });
         
-        // Cerrar dropdown al hacer clic fuera
-        document.addEventListener('click', function(event) {
-            if (!newUserButton.contains(event.target) && !userDropdown.contains(event.target)) {
+        document.addEventListener('click', (e) => {
+            if (!userButton.contains(e.target) && !userDropdown.contains(e.target)) {
                 userDropdown.classList.add('hidden');
             }
         });
