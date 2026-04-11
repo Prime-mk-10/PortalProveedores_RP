@@ -15,8 +15,51 @@ async function cargarNav() {
         const response = await fetch('partials/nav.html');
         const html = await response.text();
         document.getElementById('nav-placeholder').innerHTML = html;
+        
+        // Esperar un momento para que Flowbite procese el DOM
+        setTimeout(() => {
+            // Reinicializar Flowbite después de cargar el navbar
+            if (typeof Flowbite !== 'undefined') {
+                // Forzar reinicialización de todos los componentes
+                document.querySelectorAll('[data-dropdown-toggle]').forEach(el => {
+                    const dropdownId = el.getAttribute('data-dropdown-toggle');
+                    const dropdownEl = document.getElementById(dropdownId);
+                    if (dropdownEl && dropdownEl.getAttribute('data-flowbite-initialized') === 'true') {
+                        dropdownEl.removeAttribute('data-flowbite-initialized');
+                    }
+                });
+            }
+            
+            // Inicializar manualmente el dropdown del usuario
+            inicializarDropdownUsuario();
+        }, 100);
     } catch (error) {
         console.error('Error cargando la navegación:', error);
+    }
+}
+
+// Función separada para inicializar el dropdown del usuario
+function inicializarDropdownUsuario() {
+    const userButton = document.getElementById('dropdownUserButton');
+    const userDropdown = document.getElementById('dropdownUser');
+    
+    if (userButton && userDropdown) {
+        // Remover cualquier event listener anterior
+        const newUserButton = userButton.cloneNode(true);
+        userButton.parentNode.replaceChild(newUserButton, userButton);
+        
+        newUserButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            userDropdown.classList.toggle('hidden');
+        });
+        
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            if (!newUserButton.contains(event.target) && !userDropdown.contains(event.target)) {
+                userDropdown.classList.add('hidden');
+            }
+        });
     }
 }
 
@@ -547,4 +590,42 @@ function mostrarMensaje(containerId, mensaje, tipo) {
     setTimeout(() => {
         container.textContent = '';
     }, 5000);
+}
+
+// Añade esta función al final de tu script.js
+function reinicializarFlowbite() {
+    // Reinicializar los dropdowns de Flowbite
+    if (typeof Flowbite !== 'undefined') {
+        // Inicializar todos los componentes de Flowbite
+        document.querySelectorAll('[data-dropdown-toggle]').forEach(element => {
+            const dropdownId = element.getAttribute('data-dropdown-toggle');
+            const dropdownElement = document.getElementById(dropdownId);
+            if (dropdownElement && !dropdownElement.hasAttribute('data-flowbite-initialized')) {
+                new Flowbite.Dropdown(dropdownElement, element);
+            }
+        });
+    }
+    
+    // Alternativa manual para el dropdown del usuario
+    const userButton = document.getElementById('dropdownUserButton');
+    const userDropdown = document.getElementById('dropdownUser');
+    
+    if (userButton && userDropdown) {
+        // Remover event listeners anteriores para evitar duplicados
+        const newUserButton = userButton.cloneNode(true);
+        userButton.parentNode.replaceChild(newUserButton, userButton);
+        
+        newUserButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            userDropdown.classList.toggle('hidden');
+        });
+        
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            if (!newUserButton.contains(event.target) && !userDropdown.contains(event.target)) {
+                userDropdown.classList.add('hidden');
+            }
+        });
+    }
 }
