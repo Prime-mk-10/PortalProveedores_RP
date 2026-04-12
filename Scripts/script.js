@@ -2,11 +2,8 @@
 let userData = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Cargar la navegación parcial
-    await cargarNav();
-    // 2. Cargar datos del usuario y configurar menú
-    await cargarDatosUsuario();
-    // 3. Cargar un módulo por defecto (según rol)
+    await cargarNav();          // 1. Carga navbar (y reinicializa Flowbite)
+    await cargarDatosUsuario(); // 2. Carga datos y actualiza dropdown
     cargarModuloPorDefecto();
 });
 
@@ -16,65 +13,52 @@ async function cargarNav() {
         const html = await response.text();
         document.getElementById('nav-placeholder').innerHTML = html;
         
-        // Esperar a que Flowbite esté disponible y luego reinicializar componentes
-        await waitForFlowbite();
-        initFlowbiteComponents();
+        // Esperar a que el navegador procese el nuevo DOM
+        setTimeout(() => {
+            // Reinicializar todos los componentes de Flowbite
+            if (typeof Flowbite !== 'undefined' && Flowbite.init) {
+                Flowbite.init();
+            } else if (typeof initFlowbite !== 'undefined') {
+                initFlowbite();
+            }
+            
+            // También actualizar los datos del usuario en el dropdown (nombre, email)
+            actualizarDatosDropdown();
+        }, 100);
     } catch (error) {
         console.error('Error cargando la navegación:', error);
     }
 }
 
-function waitForFlowbite() {
-    return new Promise((resolve) => {
-        if (typeof Flowbite !== 'undefined') {
-            resolve();
-        } else {
-            const checkInterval = setInterval(() => {
-                if (typeof Flowbite !== 'undefined') {
-                    clearInterval(checkInterval);
-                    resolve();
-                }
-            }, 50);
-        }
-    });
+function actualizarDatosDropdown() {
+    // Si ya tenemos userData cargado (desde cargarDatosUsuario)
+    if (userData) {
+        const dropdownUserName = document.getElementById('dropdownUserName');
+        const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+        if (dropdownUserName) dropdownUserName.textContent = userData.nombre || userData.email.split('@')[0];
+        if (dropdownUserEmail) dropdownUserEmail.textContent = userData.email;
+    }
 }
 
-function initFlowbiteComponents() {
-    // Destruir instancias existentes si es necesario
-    if (window.FlowbiteInstances) {
-        window.FlowbiteInstances.forEach(instance => instance.destroy());
-    }
-    
-    // Reinicializar todos los dropdowns y componentes
-    if (typeof Flowbite !== 'undefined') {
-        // Forzar reinicialización
-        Flowbite.init();
-    }
-    
-    // También podemos inicializar manualmente el dropdown de usuario si falla Flowbite
-    // pero como fallback
-    setTimeout(() => {
-        const userButton = document.getElementById('dropdownUserButton');
-        if (userButton && !userButton.hasAttribute('data-flowbite-initialized')) {
-            // Fallback manual solo si Flowbite no lo hizo
-            inicializarDropdownUsuarioManual();
-        }
-    }, 200);
-}
-
-function inicializarDropdownUsuarioManual() {
-    const userButton = document.querySelector('[data-dropdown-toggle="dropdown-user"]');
-    const userDropdown = document.getElementById('dropdown-user');
+// Función separada para inicializar el dropdown del usuario
+function inicializarDropdownUsuario() {
+    const userButton = document.getElementById('dropdownUserButton');
+    const userDropdown = document.getElementById('dropdownUser');
     
     if (userButton && userDropdown) {
-        userButton.addEventListener('click', (e) => {
+        // Remover cualquier event listener anterior
+        const newUserButton = userButton.cloneNode(true);
+        userButton.parentNode.replaceChild(newUserButton, userButton);
+        
+        newUserButton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             userDropdown.classList.toggle('hidden');
         });
         
-        document.addEventListener('click', (e) => {
-            if (!userButton.contains(e.target) && !userDropdown.contains(e.target)) {
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            if (!newUserButton.contains(event.target) && !userDropdown.contains(event.target)) {
                 userDropdown.classList.add('hidden');
             }
         });
