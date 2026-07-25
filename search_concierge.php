@@ -13,47 +13,84 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 }
 
 $q = trim($_GET['q'] ?? '');
-$nivel1 = trim($_GET['nivel1'] ?? '');
-$nivel2 = trim($_GET['nivel2'] ?? '');
-$nivel3 = trim($_GET['nivel3'] ?? '');
+$nivel1 = normalizarFiltroCategoria($_GET['nivel1'] ?? '');
+$nivel2 = normalizarFiltroCategoria($_GET['nivel2'] ?? '');
+$nivel3 = normalizarFiltroCategoria($_GET['nivel3'] ?? '');
 
 $where = [];
 $params = [];
 $types = '';
 
-if ($nivel1 !== '') {
-    $where[] = "p.categoria_nivel_1 = ?";
-    $params[] = intval($nivel1);
+function normalizarFiltroCategoria($valor) {
+    $valor = trim((string) $valor);
+    return ($valor === '' || $valor === '0') ? '' : $valor;
+}
+
+function agregarFiltroCategoria(&$where, &$params, &$types, $campo, $valor) {
+    if ($valor === '') return;
+
+    $where[] = "$campo = ?";
+    $params[] = intval($valor);
     $types .= 'i';
 }
 
-if ($nivel2 !== '') {
-    $where[] = "p.categoria_nivel_2 = ?";
-    $params[] = intval($nivel2);
-    $types .= 'i';
-}
+function obtenerTerminosBusqueda($q) {
+    $q = trim($q);
+    if ($q === '') return [];
 
-if ($nivel3 !== '') {
-    $where[] = "p.categoria_nivel_3 = ?";
-    $params[] = intval($nivel3);
-    $types .= 'i';
-}
+    // Permite buscar por listas como: Software, Hardware, Computo
+    $partes = preg_split('/[,;\r\n\t]+/', $q);
+    $terminos = [];
 
-if ($q !== '') {
-    $like = '%' . $q . '%';
-
-    $where[] = "(
-        p.razon_social LIKE ?
-        OR p.nombre_comercial LIKE ?
-        OR p.descripcion_actividad LIKE ?
-        OR p.palabras_clave LIKE ?
-        OR u.email LIKE ?
-    )";
-
-    for ($i = 0; $i < 5; $i++) {
-        $params[] = $like;
-        $types .= 's';
+    foreach ($partes as $parte) {
+        $parte = trim(preg_replace('/\s+/', ' ', $parte));
+        if ($parte !== '' && strlen($parte) >= 2) {
+            $terminos[strtolower($parte)] = $parte;
+        }
     }
+
+    if (empty($terminos)) {
+        $terminos[strtolower($q)] = $q;
+    }
+
+    return array_values($terminos);
+}
+
+agregarFiltroCategoria($where, $params, $types, 'p.categoria_nivel_1', $nivel1);
+agregarFiltroCategoria($where, $params, $types, 'p.categoria_nivel_2', $nivel2);
+agregarFiltroCategoria($where, $params, $types, 'p.categoria_nivel_3', $nivel3);
+
+$terminosBusqueda = obtenerTerminosBusqueda($q);
+
+if (!empty($terminosBusqueda)) {
+    $bloquesBusqueda = [];
+
+    foreach ($terminosBusqueda as $termino) {
+        $like = '%' . $termino . '%';
+
+        $bloquesBusqueda[] = "(
+            p.razon_social LIKE ?
+            OR p.nombre_comercial LIKE ?
+            OR p.descripcion_actividad LIKE ?
+            OR p.palabras_clave LIKE ?
+            OR u.email LIKE ?
+            OR u.telefono LIKE ?
+            OR c1.nombre LIKE ?
+            OR c2.nombre LIKE ?
+            OR c3.nombre LIKE ?
+            OR c1.codigo LIKE ?
+            OR c2.codigo LIKE ?
+            OR c3.codigo LIKE ?
+        )";
+
+        for ($i = 0; $i < 12; $i++) {
+            $params[] = $like;
+            $types .= 's';
+        }
+    }
+
+    // Con OR basta que coincida una palabra de la lista para mostrar el proveedor.
+    $where[] = '(' . implode(' OR ', $bloquesBusqueda) . ')';
 
     $where[] = "(
         COALESCE(p.descripcion_actividad, '') <> ''

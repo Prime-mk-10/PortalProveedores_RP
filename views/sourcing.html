@@ -1,13 +1,34 @@
+<div class="space-y-6" id="sourcing-view">
+  <div>
+    <h1 class="text-2xl font-bold text-[#0b3b5b] mb-2">Sourcing</h1>
+    <p class="text-gray-600 text-sm">Administra tu perfil y utiliza una vista interactiva para externalizar productos desde pestañas separadas.</p>
+  </div>
+
+  <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+    <div class="flex flex-col md:flex-row border-b border-gray-200" role="tablist" aria-label="Pestañas de Sourcing">
+      <button type="button" data-sourcing-tab-button="perfil" class="sourcing-tab-btn px-5 py-3 text-left font-semibold text-[#0b3b5b] border-b-2 border-[#0b3b5b] bg-[#f8fbfd]" aria-selected="true">
+        <i class="fas fa-user mr-2"></i>Perfil
+      </button>
+      <button type="button" data-sourcing-tab-button="externalizar" class="sourcing-tab-btn px-5 py-3 text-left font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-50" aria-selected="false">
+        <i class="fas fa-box-open mr-2"></i>Externalizar producto
+      </button>
+    </div>
+
+    <section data-sourcing-tab-panel="perfil" class="p-4">
 <div>
   <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Mi Perfil</h2>
 
   <!-- Contenedor para ofertantes -->
-  <div id="ofertante-section" style="display: none;">
+  <div id="ofertante-section" style="display: none">
     <div class="mb-6">
-      <label class="block text-gray-700 font-medium mb-2">Tipo de proveedor:</label>
+      <label class="block text-gray-700 font-medium mb-2"
+        >Tipo de proveedor:</label
+      >
       <select id="tipoProveedor" class="border rounded px-3 py-2 w-64">
         <option value="">-- Selecciona --</option>
-        <option value="fisica_empresarial">Persona Física con Actividad Empresarial</option>
+        <option value="fisica_empresarial">
+          Persona Física con Actividad Empresarial
+        </option>
         <option value="moral">Persona Moral</option>
       </select>
     </div>
@@ -16,95 +37,509 @@
       <!-- Campos del proveedor (se generan dinámicamente) -->
       <div id="formCampos"></div>
 
-      <!-- Sección Actividades Económicas -->
-      <div id="actividades-section" style="display: none;" class="mt-6 border-t pt-4">
-        <h3 class="text-lg font-bold text-[#0b3b5b] mb-3">Actividades Económicas (Conforme a constancia de situación fiscal vigente)</h3>
-        <div class="mb-3">
-          <label class="block text-gray-700 mb-1">Número de actividades a registrar:</label>
-          <input type="number" id="numActividades" min="0" max="20" value="0" class="border rounded px-3 py-1 w-24">
-          <button type="button" id="generarActividades" class="ml-2 bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">Generar campos</button>
+     <!-- Sección Actividades Económicas -->
+<div id="actividades-section" style="display: none;" class="mt-6 border-t pt-4">
+    <h3 class="text-lg font-bold text-[#0b3b5b] mb-3">Actividades Económicas (Conforme a constancia de situación fiscal vigente)</h3>
+    
+    <!-- Contenedor donde se inyectará la tabla de actividades -->
+    <div id="actividadesContainer" class="overflow-x-auto"></div>
+    
+    <!-- Controles para agregar nuevas actividades -->
+    <div class="mt-4 flex items-end gap-3">
+        <div>
+            <label class="block text-gray-700 text-sm mb-1">Número de actividades a agregar:</label>
+            <input type="number" id="numActividades" min="1" max="20" value="1" class="border rounded px-3 py-1 w-24">
         </div>
-        <div id="actividadesContainer" class="overflow-x-auto">
-          <!-- Tabla generada dinámicamente -->
-        </div>
-      </div>
+        <button type="button" id="generarActividades" class="bg-gray-200 px-4 py-1 rounded hover:bg-gray-300">
+            Agregar filas
+        </button>
+    </div>
+    <p class="text-xs text-gray-500 mt-2">* Las nuevas filas se añadirán al final de la tabla sin perder los datos existentes.</p>
+</div>
 
       <!-- Sección Relación de Accionistas (solo moral) -->
-      <div id="accionistas-section" style="display: none;" class="mt-6 border-t pt-4">
-        <h3 class="text-lg font-bold text-[#0b3b5b] mb-3">Relación de Accionistas</h3>
+      <div
+        id="accionistas-section"
+        style="display: none"
+        class="mt-6 border-t pt-4"
+      >
+        <h3 class="text-lg font-bold text-[#0b3b5b] mb-3">
+          Relación de Accionistas
+        </h3>
         <div id="accionistasTableContainer" class="overflow-x-auto"></div>
-        <button type="button" id="btnAgregarAccionista" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <button
+          type="button"
+          id="btnAgregarAccionista"
+          class="mt-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
           <i class="fas fa-plus"></i> Agregar Accionista
         </button>
       </div>
 
       <div class="flex gap-4 mt-4">
-        <button type="submit" class="bg-[#0b3b5b] text-white px-6 py-2 rounded hover:bg-[#0f4a73]">Guardar</button>
-        <button type="button" id="cancelarForm" class="bg-gray-300 px-6 py-2 rounded">Cancelar</button>
+        <button
+          type="submit"
+          class="bg-[#0b3b5b] text-white px-6 py-2 rounded hover:bg-[#0f4a73]"
+        >
+          Guardar
+        </button>
+        <button
+          type="button"
+          id="cancelarForm"
+          class="bg-gray-300 px-6 py-2 rounded"
+        >
+          Cancelar
+        </button>
       </div>
       <div id="formMessage" class="mt-2 text-sm"></div>
     </form>
-
     <!-- Modal para accionistas (FUERA del formulario) -->
-    <div id="modalAccionista" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden" style="z-index: 999;">
+    <div
+      id="modalAccionista"
+      class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden"
+      style="z-index: 999"
+    >
       <div class="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 id="modalTitle" class="text-xl font-bold text-[#0b3b5b] mb-4">Agregar Accionista</h3>
-        <input type="hidden" id="accionistaId" value="0">
+        <h3 id="modalTitle" class="text-xl font-bold text-[#0b3b5b] mb-4">
+          Agregar Accionista
+        </h3>
+        <input type="hidden" id="accionistaId" value="0" />
         <div class="space-y-3">
           <div>
             <label class="block text-gray-700">Nombre completo:</label>
-            <input type="text" id="accNombre" class="w-full border rounded px-3 py-2" required>
+            <input
+              type="text"
+              id="accNombre"
+              class="w-full border rounded px-3 py-2"
+              required
+            />
           </div>
           <div>
             <label class="block text-gray-700">CURP:</label>
-            <input type="text" id="accCurp" class="w-full border rounded px-3 py-2" maxlength="18" required>
+            <input
+              type="text"
+              id="accCurp"
+              class="w-full border rounded px-3 py-2"
+              maxlength="18"
+              required
+            />
           </div>
           <div>
             <label class="block text-gray-700">Número de INE:</label>
-            <input type="text" id="accIne" class="w-full border rounded px-3 py-2" maxlength="18" required>
+            <input
+              type="text"
+              id="accIne"
+              class="w-full border rounded px-3 py-2"
+              maxlength="18"
+              required
+            />
           </div>
           <div>
             <label class="block text-gray-700">Fecha de alta:</label>
-            <input type="date" id="accFechaAlta" class="w-full border rounded px-3 py-2" required>
+            <input
+              type="date"
+              id="accFechaAlta"
+              class="w-full border rounded px-3 py-2"
+              required
+            />
+          </div>
+          <div>
+            <label class="block text-gray-700"
+              >Porcentaje de participación (%):</label
+            >
+            <input
+              type="number"
+              id="accPorcentaje"
+              step="0.01"
+              min="0"
+              max="100"
+              class="w-full border rounded px-3 py-2"
+              required
+            />
           </div>
         </div>
         <div class="flex justify-end gap-3 mt-6">
-          <button type="button" id="btnCerrarModal" class="px-4 py-2 border rounded hover:bg-gray-100">Cancelar</button>
-          <button type="button" id="btnGuardarAccionista" class="px-4 py-2 bg-[#0b3b5b] text-white rounded hover:bg-[#0f4a73]">Guardar</button>
+          <button
+            type="button"
+            id="btnCerrarModal"
+            class="px-4 py-2 border rounded hover:bg-gray-100"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            id="btnGuardarAccionista"
+            class="px-4 py-2 bg-[#0b3b5b] text-white rounded hover:bg-[#0f4a73]"
+          >
+            Guardar
+          </button>
         </div>
       </div>
     </div>
   </div>
+<!-- Sección Apoderados Legales (visible para física y moral) -->
+<div id="apoderados-section" style="display: none;" class="mt-6 border-t pt-4">
+    <h3 class="text-lg font-bold text-[#0b3b5b] mb-3">Apoderados Legales</h3>
+    <div id="apoderadosTableContainer" class="overflow-x-auto"></div>
+    <button type="button" id="btnAgregarApoderado" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <i class="fas fa-plus"></i> Agregar Apoderado
+    </button>
+</div>
 
+<!-- Modal para Apoderados -->
+<div id="modalApoderado" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden" style="z-index: 999;">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h3 id="modalTitleApoderado" class="text-xl font-bold text-[#0b3b5b] mb-4">Agregar Apoderado</h3>
+        <input type="hidden" id="apoderadoId" value="0">
+        <div class="space-y-3">
+            <div>
+                <label class="block text-gray-700">Nombre completo:</label>
+                <input type="text" id="apodNombre" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">CURP:</label>
+                <input type="text" id="apodCurp" class="w-full border rounded px-3 py-2" maxlength="18" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Número de INE:</label>
+                <input type="text" id="apodIne" class="w-full border rounded px-3 py-2" maxlength="18" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Fecha de alta:</label>
+                <input type="date" id="apodFechaAlta" class="w-full border rounded px-3 py-2" required>
+            </div>
+        </div>
+        <div class="flex justify-end gap-3 mt-6">
+            <button type="button" id="btnCerrarModalApoderado" class="px-4 py-2 border rounded hover:bg-gray-100">Cancelar</button>
+            <button type="button" id="btnGuardarApoderado" class="px-4 py-2 bg-[#0b3b5b] text-white rounded hover:bg-[#0f4a73]">Guardar</button>
+        </div>
+    </div>
+</div>
   <!-- Contenedor para otros roles (Alta General) - sin cambios -->
-  <div id="general-section" style="display: none;">
+  <div id="general-section" style="display: none">
     <form id="generalForm" class="space-y-4">
       <!-- ... mismo contenido que en la versión original ... -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div><label>RFC:</label><input type="text" name="rfc" class="w-full border p-2 rounded" required></div>
-        <div><label>Razón Social:</label><input type="text" name="razon_social" class="w-full border p-2 rounded" required></div>
-        <div><label>Régimen Fiscal:</label><input type="text" name="regimen_fiscal" class="w-full border p-2 rounded" required></div>
-        <div><label>Vialidad:</label><input type="text" name="nombre_vialidad" class="w-full border p-2 rounded"></div>
-        <div><label>Núm. Exterior:</label><input type="text" name="num_exterior" class="w-full border p-2 rounded"></div>
-        <div><label>Núm. Interior:</label><input type="text" name="num_interior" class="w-full border p-2 rounded"></div>
-        <div><label>Colonia:</label><input type="text" name="colonia" class="w-full border p-2 rounded"></div>
-        <div><label>Localidad:</label><input type="text" name="localidad" class="w-full border p-2 rounded"></div>
-        <div><label>Código Postal:</label><input type="text" name="codigo_postal" class="w-full border p-2 rounded"></div>
-        <div><label>Ciudad:</label><input type="text" name="ciudad" class="w-full border p-2 rounded"></div>
-        <div><label>Estado:</label><input type="text" name="estado" class="w-full border p-2 rounded"></div>
-        <div><label>Teléfono:</label><input type="text" name="telefono" class="w-full border p-2 rounded"></div>
-        <div><label>Extensión:</label><input type="text" name="extension" class="w-full border p-2 rounded"></div>
-        <div><label>Fax:</label><input type="text" name="fax" class="w-full border p-2 rounded"></div>
-        <div><label>Ext. Fax:</label><input type="text" name="fax_extension" class="w-full border p-2 rounded"></div>
-        <div><label>Representante Legal:</label><input type="text" name="representante_legal" class="w-full border p-2 rounded"></div>
-        <div><label>Email:</label><input type="email" name="email" class="w-full border p-2 rounded" required></div>
-        <div><label>Banco:</label><input type="text" name="banco" class="w-full border p-2 rounded"></div>
-        <div><label>Sucursal Bancaria:</label><input type="text" name="sucursal_bancaria" class="w-full border p-2 rounded"></div>
-        <div><label>Cuenta:</label><input type="text" name="cuenta_bancaria" class="w-full border p-2 rounded"></div>
-        <div><label>CLABE:</label><input type="text" name="clabe_interbancaria" class="w-full border p-2 rounded"></div>
+        <div>
+          <label>RFC:</label
+          ><input
+            type="text"
+            name="rfc"
+            class="w-full border p-2 rounded"
+            required
+          />
+        </div>
+        <div>
+          <label>Razón Social:</label
+          ><input
+            type="text"
+            name="razon_social"
+            class="w-full border p-2 rounded"
+            required
+          />
+        </div>
+
+        <div>
+          <label>Nombre comercial:</label>
+          <input type="text" name="nombre_comercial" class="w-full border p-2 rounded" placeholder="Nombre público o comercial" />
+        </div>
+        <div class="md:col-span-2">
+          <label>Descripción de actividad / servicios:</label>
+          <textarea name="descripcion_actividad" class="w-full border p-2 rounded" rows="3" placeholder="Describe lo que ofrece tu institución o empresa"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label>Palabras clave:</label>
+          <input type="text" name="palabras_clave" class="w-full border p-2 rounded" placeholder="Ej: software, mantenimiento, medicamentos" />
+        </div>
+        <div>
+          <label>Categoría Concierge - 1er nivel:</label>
+          <select name="categoria_nivel_1" data-cat-nivel="1" class="w-full border p-2 rounded">
+            <option value="">-- Selecciona --</option>
+          </select>
+        </div>
+        <div>
+          <label>Categoría Concierge - 2do nivel:</label>
+          <select name="categoria_nivel_2" data-cat-nivel="2" class="w-full border p-2 rounded" disabled>
+            <option value="">-- Selecciona --</option>
+          </select>
+        </div>
+        <div>
+          <label>Categoría Concierge - 3er nivel:</label>
+          <select name="categoria_nivel_3" data-cat-nivel="3" class="w-full border p-2 rounded" disabled>
+            <option value="">-- Selecciona --</option>
+          </select>
+        </div>
+        <div class="md:col-span-2 mt-1 rounded-lg border border-[#d9e5ef] bg-[#f8fbfd] p-4" data-concierge-ayuda-box>
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+              <p class="font-semibold text-[#0b3b5b]">¿Necesitas ayuda para elegir la categoría?</p>
+              <p class="text-sm text-gray-600">Puedes buscarla por tu cuenta o solicitar asistencia personalizada.</p>
+            </div>
+            <button type="button" data-concierge-ayuda-toggle class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0b3b5b] px-4 py-2 text-white hover:bg-[#0f4a73]">
+              <i class="fas fa-circle-question"></i>
+              Elegir opción de ayuda
+            </button>
+          </div>
+          <div data-concierge-ayuda-opciones class="hidden mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+            <button type="button" data-concierge-action="buscar" class="rounded-lg border border-[#0b3b5b] bg-white px-4 py-3 text-left hover:bg-blue-50">
+              <span class="block font-semibold text-[#0b3b5b]"><i class="fas fa-search mr-2"></i>Buscar en Concierge</span>
+              <span class="text-sm text-gray-600">Ir a la vista Concierge para realizar la búsqueda manual.</span>
+            </button>
+            <button type="button" data-concierge-action="whatsapp" class="rounded-lg border border-green-600 bg-white px-4 py-3 text-left hover:bg-green-50">
+              <span class="block font-semibold text-green-700"><i class="fab fa-whatsapp mr-2"></i>Asistencia por WhatsApp</span>
+              <span class="text-sm text-gray-600">Pedir apoyo personalizado para seleccionar la categoría.</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label>Régimen Fiscal:</label
+          ><input
+            type="text"
+            name="regimen_fiscal"
+            class="w-full border p-2 rounded"
+            required
+          />
+        </div>
+        <div>
+          <label>Vialidad:</label
+          ><input
+            type="text"
+            name="nombre_vialidad"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Núm. Exterior:</label
+          ><input
+            type="text"
+            name="num_exterior"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Núm. Interior:</label
+          ><input
+            type="text"
+            name="num_interior"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Colonia:</label
+          ><input
+            type="text"
+            name="colonia"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Localidad:</label
+          ><input
+            type="text"
+            name="localidad"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Código Postal:</label
+          ><input
+            type="text"
+            name="codigo_postal"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Ciudad:</label
+          ><input type="text" name="ciudad" class="w-full border p-2 rounded" />
+        </div>
+        <div>
+          <label>Estado:</label
+          ><input type="text" name="estado" class="w-full border p-2 rounded" />
+        </div>
+        <div>
+          <label>Teléfono:</label
+          ><input
+            type="text"
+            name="telefono"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Extensión:</label
+          ><input
+            type="text"
+            name="extension"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Fax:</label
+          ><input type="text" name="fax" class="w-full border p-2 rounded" />
+        </div>
+        <div>
+          <label>Ext. Fax:</label
+          ><input
+            type="text"
+            name="fax_extension"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Representante Legal:</label
+          ><input
+            type="text"
+            name="representante_legal"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Email:</label
+          ><input
+            type="email"
+            name="email"
+            class="w-full border p-2 rounded"
+            required
+          />
+        </div>
+        <div>
+          <label>Banco:</label
+          ><input type="text" name="banco" class="w-full border p-2 rounded" />
+        </div>
+        <div>
+          <label>Sucursal Bancaria:</label
+          ><input
+            type="text"
+            name="sucursal_bancaria"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>Cuenta:</label
+          ><input
+            type="text"
+            name="cuenta_bancaria"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+        <div>
+          <label>CLABE:</label
+          ><input
+            type="text"
+            name="clabe_interbancaria"
+            class="w-full border p-2 rounded"
+          />
+        </div>
       </div>
-      <button type="submit" class="bg-[#0b3b5b] text-white px-6 py-2 rounded">Guardar Alta General</button>
+      <button type="submit" class="bg-[#0b3b5b] text-white px-6 py-2 rounded">
+        Guardar Alta General
+      </button>
       <div id="generalMessage" class="mt-2 text-sm"></div>
     </form>
+  </div>
+</div>
+
+    </section>
+
+    <section data-sourcing-tab-panel="externalizar" class="hidden p-4">
+
+<div class="space-y-6">
+  <div>
+    <h2 class="text-2xl font-bold text-[#0b3b5b] mb-2">Externalizar producto</h2>
+    <p class="text-gray-600 text-sm">Captura el producto o servicio que necesitas externalizar. Esta vista guarda la información solamente en este navegador y no crea tablas en la base de datos.</p>
+  </div>
+
+  <form id="externalizacionForm" class="space-y-4 bg-white border border-gray-200 rounded-lg p-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Producto o servicio a externalizar:</label>
+        <input type="text" name="producto_nombre" class="w-full border p-2 rounded" placeholder="Ej: equipo de cómputo, uniformes, mantenimiento" required>
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Prioridad:</label>
+        <select name="prioridad" class="w-full border p-2 rounded">
+          <option value="media">Media</option>
+          <option value="alta">Alta</option>
+          <option value="baja">Baja</option>
+        </select>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-gray-700 font-medium mb-1">Descripción / especificaciones:</label>
+        <textarea name="descripcion" class="w-full border p-2 rounded" rows="4" placeholder="Describe características, alcance, materiales, marcas aceptadas, condiciones o cualquier requisito importante." required></textarea>
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Cantidad estimada:</label>
+        <input type="number" name="cantidad" min="0" step="0.01" class="w-full border p-2 rounded" placeholder="Ej: 10">
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Unidad:</label>
+        <input type="text" name="unidad" class="w-full border p-2 rounded" placeholder="Ej: piezas, cajas, servicio, lote">
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Presupuesto estimado:</label>
+        <input type="number" name="presupuesto" min="0" step="0.01" class="w-full border p-2 rounded" placeholder="Ej: 50000">
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Fecha requerida:</label>
+        <input type="date" name="fecha_requerida" class="w-full border p-2 rounded">
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Categoría - 1er nivel:</label>
+        <select name="external_categoria_nivel_1" data-external-cat-nivel="1" class="w-full border p-2 rounded">
+          <option value="">-- Selecciona --</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Categoría - 2do nivel:</label>
+        <select name="external_categoria_nivel_2" data-external-cat-nivel="2" class="w-full border p-2 rounded" disabled>
+          <option value="">-- Selecciona --</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Categoría - 3er nivel:</label>
+        <select name="external_categoria_nivel_3" data-external-cat-nivel="3" class="w-full border p-2 rounded" disabled>
+          <option value="">-- Selecciona --</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Lugar de entrega / zona:</label>
+        <input type="text" name="ubicacion_entrega" class="w-full border p-2 rounded" placeholder="Ej: Aguascalientes, CDMX, remoto">
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-gray-700 font-medium mb-1">Observaciones adicionales:</label>
+        <textarea name="observaciones" class="w-full border p-2 rounded" rows="3" placeholder="Agrega comentarios, restricciones, fechas de contacto o información complementaria."></textarea>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row md:items-center gap-3 pt-2">
+      <button type="submit" class="bg-[#0b3b5b] text-white px-6 py-2 rounded hover:bg-[#0f4a73]">
+        <i class="fas fa-save mr-2"></i>Guardar en navegador
+      </button>
+      <button type="reset" class="bg-gray-200 px-6 py-2 rounded hover:bg-gray-300">Limpiar</button>
+      <div id="externalizacionMessage" class="text-sm"></div>
+    </div>
+  </form>
+
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+      <div>
+        <h3 class="text-lg font-bold text-[#0b3b5b]">Solicitudes locales</h3>
+        <p class="text-sm text-gray-500">Aquí aparecerán los productos o servicios guardados en este navegador.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <button type="button" id="btnRecargarExternalizaciones" class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">
+          <i class="fas fa-rotate mr-2"></i>Actualizar vista
+        </button>
+        <button type="button" id="btnLimpiarExternalizaciones" class="bg-red-50 text-red-700 px-4 py-2 rounded hover:bg-red-100">
+          <i class="fas fa-trash mr-2"></i>Borrar todo
+        </button>
+      </div>
+    </div>
+    <div id="externalizacionesListado" class="overflow-x-auto text-sm text-gray-600">
+      <p>No hay solicitudes guardadas todavía.</p>
+    </div>
+  </div>
+</div>
+
+    </section>
   </div>
 </div>

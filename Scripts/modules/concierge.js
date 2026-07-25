@@ -49,9 +49,9 @@ async function inicializarConcierge() {
 
   async function buscarConcierge() {
     const params = new URLSearchParams({
-      nivel1: nivel1.value || "0",
-      nivel2: nivel2.value || "0",
-      nivel3: nivel3.value || "0",
+      nivel1: nivel1.value || "",
+      nivel2: nivel2.value || "",
+      nivel3: nivel3.value || "",
       q: inputBusqueda.value.trim(),
     });
 
@@ -85,7 +85,6 @@ async function inicializarConcierge() {
         );
         return;
       }
-console.log(data.data);
       tabla.innerHTML = data.data
         .map((row) => {
           const nombre =
@@ -112,7 +111,7 @@ console.log(data.data);
                         <td class="border p-2 align-top">
                             <strong>${escapeHtml(nombre)}</strong><br>
                             <span class="text-gray-500">${escapeHtml(row.razon_social || "")}</span><br>
-                            <span class="text-xs text-gray-500">${escapeHtml(row.rol_usuario || "")} · ${escapeHtml(row.tipo_proveedor || "")}</span>
+                            <span class="text-xs text-gray-500">${escapeHtml(row.rol || row.rol_usuario || "")} · ${escapeHtml(row.tipo_proveedor || "")}</span>
                         </td>
                         <td class="border p-2 align-top">
                             ${escapeHtml(row.descripcion_actividad || "Sin descripción registrada")}<br>

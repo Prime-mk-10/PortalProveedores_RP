@@ -2,7 +2,7 @@ function cargarModuloPorDefecto() {
     if (!userData) return;
     let moduloDefault = '';
     switch(userData.rol) {
-        case 'Ofertante': moduloDefault = 'perfil'; break;
+        case 'Ofertante': moduloDefault = 'sourcing'; break;
         case 'institucion_publica': moduloDefault = 'dashboard'; break;
         case 'privado': moduloDefault = 'perfil'; break;
         default: moduloDefault = 'sourcing';
@@ -31,6 +31,13 @@ async function cargarModulo(modulo) {
 
 function afterModuleLoad(modulo) {
     if (modulo === 'perfil') {
+        cargarFormularioProveedor();
+    }
+
+    if (modulo === 'sourcing') {
+        if (typeof inicializarSourcing === 'function') {
+            inicializarSourcing();
+        }
         cargarFormularioProveedor();
     }
 

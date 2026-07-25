@@ -246,6 +246,68 @@ if (tipo === 'fisica_empresarial' || tipo === 'moral') {
 
 
 // ============================================================
+// Ayuda para seleccionar categorías Concierge
+// ============================================================
+// Configura aquí el número de WhatsApp de asistencia con lada del país, sin + ni espacios.
+// Ejemplo México: 5215551234567. Si se deja vacío, WhatsApp abrirá solo con el mensaje sugerido.
+const WHATSAPP_CONCIERGE_NUMERO = '4499991234';
+
+function obtenerUrlWhatsappConcierge() {
+    const numero = String(window.WHATSAPP_CONCIERGE_NUMERO || WHATSAPP_CONCIERGE_NUMERO || '').replace(/\D/g, '');
+    const mensaje = encodeURIComponent('Hola, necesito asistencia personalizada para elegir la categoría Concierge de mi registro.');
+    return numero ? `https://wa.me/${numero}?text=${mensaje}` : `https://wa.me/?text=${mensaje}`;
+}
+
+function inicializarAyudaCategoriaConcierge(form) {
+    if (!form) return;
+
+    const ayudaBox = form.querySelector('[data-concierge-ayuda-box]');
+    if (!ayudaBox || ayudaBox.dataset.inicializado === 'true') return;
+
+    ayudaBox.dataset.inicializado = 'true';
+
+    const toggleBtn = ayudaBox.querySelector('[data-concierge-ayuda-toggle]');
+    const opciones = ayudaBox.querySelector('[data-concierge-ayuda-opciones]');
+    const buscarBtn = ayudaBox.querySelector('[data-concierge-action="buscar"]');
+    const whatsappBtn = ayudaBox.querySelector('[data-concierge-action="whatsapp"]');
+
+    if (toggleBtn && opciones) {
+        toggleBtn.addEventListener('click', () => {
+            opciones.classList.toggle('hidden');
+        });
+    }
+
+    if (buscarBtn) {
+        buscarBtn.addEventListener('click', () => {
+            const aceptaRiesgo = window.confirm(
+                'Advertencia: si realizas la búsqueda por tu cuenta, puedes llegar a equivocarte al seleccionar la categoría. ¿Quieres correr el riesgo?'
+            );
+
+            if (!aceptaRiesgo) return;
+
+            if (typeof cargarModulo === 'function') {
+                cargarModulo('concierge');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                window.location.href = 'Index.html';
+            }
+        });
+    }
+
+    if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', () => {
+            const aceptaCosto = window.confirm(
+                'Advertencia: esta opción tiene costo. ¿Deseas continuar a WhatsApp para pedir asistencia personalizada?'
+            );
+
+            if (!aceptaCosto) return;
+
+            window.open(obtenerUrlWhatsappConcierge(), '_blank', 'noopener');
+        });
+    }
+}
+
+// ============================================================
 // Categorías Concierge dentro del perfil del proveedor/usuario
 // ============================================================
 async function obtenerCategoriasConcierge(nivel, parentId = '') {
@@ -272,6 +334,8 @@ function llenarSelectCategorias(select, datos, textoDefault) {
 async function inicializarCategoriasPerfil(formSelector, data = {}) {
     const form = document.querySelector(formSelector);
     if (!form) return;
+
+    inicializarAyudaCategoriaConcierge(form);
 
     const nivel1 = form.querySelector('[name="categoria_nivel_1"]');
     const nivel2 = form.querySelector('[name="categoria_nivel_2"]');

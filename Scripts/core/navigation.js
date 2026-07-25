@@ -55,7 +55,7 @@ function configurarMenu(rol) {
     switch(rol) {
         case 'Ofertante':
             menuItems = [
-                { nombre: 'Sourcing', icono: 'fa-search', id: 'perfil' },
+                { nombre: 'Sourcing', icono: 'fa-search', id: 'sourcing' },
                 { nombre: 'Automatización', icono: 'fa-robot', id: 'automatizacion' },
                 { nombre: 'Concierge', icono: 'fa-concierge-bell', id: 'concierge' },
                 { nombre: 'Legal', icono: 'fa-gavel', id: 'legal' },
@@ -69,7 +69,7 @@ function configurarMenu(rol) {
             break;
         case 'institucion_publica':
             menuItems = [
-                { nombre: 'Sourcing', icono: 'fa-search', id: 'perfil' },
+                { nombre: 'Sourcing', icono: 'fa-search', id: 'sourcing' },
                 { nombre: 'Automatización', icono: 'fa-robot', id: 'automatizacion' },
                 { nombre: 'Concierge', icono: 'fa-concierge-bell', id: 'concierge' },
                 { nombre: 'Financiamiento', icono: 'fa-coins', id: 'financiamiento' },

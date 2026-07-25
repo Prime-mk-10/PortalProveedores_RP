@@ -82,6 +82,28 @@ function camposConciergeProveedorHTML() {
                 <option value="">-- Selecciona --</option>
             </select>
         </div>
+        <div class="md:col-span-2 mt-1 rounded-lg border border-[#d9e5ef] bg-[#f8fbfd] p-4" data-concierge-ayuda-box>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div>
+                    <p class="font-semibold text-[#0b3b5b]">¿Necesitas ayuda para elegir la categoría?</p>
+                    <p class="text-sm text-gray-600">Puedes buscarla por tu cuenta o solicitar asistencia personalizada.</p>
+                </div>
+                <button type="button" data-concierge-ayuda-toggle class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0b3b5b] px-4 py-2 text-white hover:bg-[#0f4a73]">
+                    <i class="fas fa-circle-question"></i>
+                    Elegir opción de ayuda
+                </button>
+            </div>
+            <div data-concierge-ayuda-opciones class="hidden mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                <button type="button" data-concierge-action="buscar" class="rounded-lg border border-[#0b3b5b] bg-white px-4 py-3 text-left hover:bg-blue-50">
+                    <span class="block font-semibold text-[#0b3b5b]"><i class="fas fa-search mr-2"></i>Buscar en Concierge</span>
+                    <span class="text-sm text-gray-600">Ir a la vista Concierge para realizar la búsqueda manual.</span>
+                </button>
+                <button type="button" data-concierge-action="whatsapp" class="rounded-lg border border-green-600 bg-white px-4 py-3 text-left hover:bg-green-50">
+                    <span class="block font-semibold text-green-700"><i class="fab fa-whatsapp mr-2"></i>Asistencia por WhatsApp</span>
+                    <span class="text-sm text-gray-600">Pedir apoyo personalizado para seleccionar la categoría.</span>
+                </button>
+            </div>
+        </div>
     `;
 }
 
