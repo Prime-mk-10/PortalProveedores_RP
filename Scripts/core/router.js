@@ -18,6 +18,12 @@ async function cargarModulo(modulo) {
         if (!response.ok) throw new Error('Vista no encontrada');
         const html = await response.text();
         mainContainer.innerHTML = html;
+        document.querySelectorAll('[data-modulo]').forEach(item => {
+            const isActive = item.getAttribute('data-modulo') === modulo;
+            item.classList.toggle('active', isActive);
+            if (isActive) item.setAttribute('aria-current', 'page');
+            else item.removeAttribute('aria-current');
+        });
         afterModuleLoad(modulo);
     } catch (error) {
         mainContainer.innerHTML = `

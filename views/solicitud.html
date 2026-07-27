@@ -1,17 +1,23 @@
-<div>
-  <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Registrar Solicitud</h2>
-  <p class="text-gray-600">Formulario para registrar una nueva solicitud de contratación.</p>
-  <form class="mt-4">
-    <div class="mb-4">
-      <label class="block text-gray-700 mb-2">Título de la solicitud</label>
-      <input type="text" class="w-full p-2 border rounded" placeholder="Ej: Adquisición de equipo médico">
-    </div>
-    <div class="mb-4">
-      <label class="block text-gray-700 mb-2">Descripción</label>
-      <textarea class="w-full p-2 border rounded" rows="4"></textarea>
-    </div>
-    <button class="bg-[#0b3b5b] text-white px-4 py-2 rounded hover:bg-[#0f4a73]">
-      Enviar Solicitud
-    </button>
-  </form>
+<div class="module-shell space-y-6">
+  <section class="portal-hero">
+    <span class="portal-eyebrow"><i class="fas fa-file-circle-plus"></i> Solicitudes</span>
+    <h1>Registrar solicitud de contratación</h1>
+    <p>Captura los datos principales para iniciar una solicitud y dar seguimiento desde el portal.</p>
+  </section>
+
+  <section class="portal-card">
+    <form class="space-y-4">
+      <div>
+        <label class="block text-gray-700 mb-2">Título de la solicitud</label>
+        <input type="text" class="w-full p-2 border rounded" placeholder="Ej: Adquisición de equipo médico">
+      </div>
+      <div>
+        <label class="block text-gray-700 mb-2">Descripción</label>
+        <textarea class="w-full p-2 border rounded" rows="4" placeholder="Describe el alcance de la solicitud, fechas y necesidades principales."></textarea>
+      </div>
+      <button class="bg-[#0b3b5b] text-white px-4 py-2 rounded hover:bg-[#0f4a73]">
+        <i class="fas fa-paper-plane mr-2"></i>Enviar Solicitud
+      </button>
+    </form>
+  </section>
 </div>

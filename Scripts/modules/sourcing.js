@@ -1,6 +1,6 @@
 // ============================================================
 // Vista Sourcing: pestañas Perfil / Externalizar producto
-// Externalizar producto funciona como vista interactiva local
+// Externalizar producto guarda y consulta solicitudes en MySQL
 // ============================================================
 function inicializarSourcing() {
     inicializarTabsSourcing();
@@ -100,7 +100,7 @@ async function inicializarCategoriasExternalizacion() {
         llenarSelectCategorias(nivel1, datosNivel1, '-- Selecciona --');
     } catch (error) {
         console.error(error);
-        mostrarMensaje('externalizacionMessage', 'No se pudieron cargar las categorías, pero puedes guardar la solicitud localmente.', 'error');
+        mostrarMensaje('externalizacionMessage', 'No se pudieron cargar las categorías.', 'error');
     }
 }
 
@@ -113,18 +113,12 @@ function inicializarFormularioExternalizacion() {
 
     const recargarBtn = document.getElementById('btnRecargarExternalizaciones');
     if (recargarBtn) {
-        recargarBtn.addEventListener('click', () => cargarExternalizaciones());
+        recargarBtn.addEventListener('click', () => cargarExternalizaciones(true));
     }
 
     const limpiarBtn = document.getElementById('btnLimpiarExternalizaciones');
     if (limpiarBtn) {
-        limpiarBtn.addEventListener('click', () => {
-            const confirmar = window.confirm('Esto borrará las solicitudes guardadas únicamente en este navegador. ¿Deseas continuar?');
-            if (!confirmar) return;
-            guardarExternalizacionesEnNavegador([]);
-            cargarExternalizaciones();
-            mostrarMensaje('externalizacionMessage', 'Solicitudes locales eliminadas correctamente', 'success');
-        });
+        limpiarBtn.addEventListener('click', () => eliminarTodasExternalizaciones());
     }
 
     form.addEventListener('reset', () => {
@@ -138,7 +132,7 @@ function inicializarFormularioExternalizacion() {
         }, 0);
     });
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const submitBtn = form.querySelector('button[type="submit"]');
@@ -149,17 +143,23 @@ function inicializarFormularioExternalizacion() {
         }
 
         try {
-            const solicitud = construirSolicitudExternalizacion(form);
-            const solicitudes = obtenerExternalizacionesDelNavegador();
-            solicitudes.unshift(solicitud);
-            guardarExternalizacionesEnNavegador(solicitudes);
+            const formData = new FormData(form);
+            const response = await fetch('save_externalizacion.php', {
+                method: 'POST',
+                body: formData
+            });
 
-            mostrarMensaje('externalizacionMessage', 'Solicitud guardada en este navegador', 'success');
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.message || 'No se pudo guardar la solicitud');
+            }
+
+            mostrarMensaje('externalizacionMessage', result.message || 'Solicitud guardada en la base de datos', 'success');
             form.reset();
-            cargarExternalizaciones();
+            await cargarExternalizaciones();
         } catch (error) {
             console.error(error);
-            mostrarMensaje('externalizacionMessage', 'No se pudo guardar la solicitud local: ' + error.message, 'error');
+            mostrarMensaje('externalizacionMessage', 'Error al guardar: ' + error.message, 'error');
         } finally {
             if (submitBtn) {
                 submitBtn.innerHTML = originalText;
@@ -171,106 +171,45 @@ function inicializarFormularioExternalizacion() {
     cargarExternalizaciones();
 }
 
-function construirSolicitudExternalizacion(form) {
-    const formData = new FormData(form);
-    const producto = (formData.get('producto_nombre') || '').toString().trim();
-    const descripcion = (formData.get('descripcion') || '').toString().trim();
-
-    if (!producto) throw new Error('captura el producto o servicio');
-    if (!descripcion) throw new Error('captura la descripción o especificaciones');
-
-    const cantidad = (formData.get('cantidad') || '').toString().trim();
-    const unidad = (formData.get('unidad') || '').toString().trim();
-    const presupuesto = (formData.get('presupuesto') || '').toString().trim();
-
-    return {
-        id: generarIdExternalizacion(),
-        producto_nombre: producto,
-        prioridad: (formData.get('prioridad') || 'media').toString(),
-        descripcion,
-        cantidad,
-        unidad,
-        cantidad_resumen: construirCantidadResumen(cantidad, unidad),
-        presupuesto,
-        fecha_requerida: (formData.get('fecha_requerida') || '').toString(),
-        categoria_nivel_1: (formData.get('external_categoria_nivel_1') || '').toString(),
-        categoria_nivel_2: (formData.get('external_categoria_nivel_2') || '').toString(),
-        categoria_nivel_3: (formData.get('external_categoria_nivel_3') || '').toString(),
-        categoria_nivel_1_texto: obtenerTextoSelect(form, 'external_categoria_nivel_1'),
-        categoria_nivel_2_texto: obtenerTextoSelect(form, 'external_categoria_nivel_2'),
-        categoria_nivel_3_texto: obtenerTextoSelect(form, 'external_categoria_nivel_3'),
-        ubicacion_entrega: (formData.get('ubicacion_entrega') || '').toString().trim(),
-        observaciones: (formData.get('observaciones') || '').toString().trim(),
-        estado: 'Guardada localmente',
-        created_at: new Date().toLocaleString('es-MX')
-    };
-}
-
-function obtenerTextoSelect(form, name) {
-    const select = form.querySelector(`[name="${name}"]`);
-    if (!select || !select.value || !select.selectedOptions.length) return '';
-    return select.selectedOptions[0].textContent.trim();
-}
-
-function construirCantidadResumen(cantidad, unidad) {
-    if (cantidad && unidad) return `${cantidad} ${unidad}`;
-    if (cantidad) return cantidad;
-    if (unidad) return unidad;
-    return '-';
-}
-
-function obtenerClaveExternalizaciones() {
-    const usuario = userData && (userData.email || userData.id || userData.user_id)
-        ? String(userData.email || userData.id || userData.user_id).trim()
-        : 'anonimo';
-    return `sourcing_externalizaciones_productos_${usuario}`;
-}
-
-function obtenerExternalizacionesDelNavegador() {
-    try {
-        const datos = localStorage.getItem(obtenerClaveExternalizaciones());
-        const solicitudes = datos ? JSON.parse(datos) : [];
-        return Array.isArray(solicitudes) ? solicitudes : [];
-    } catch (error) {
-        console.error('No se pudo leer localStorage:', error);
-        return [];
-    }
-}
-
-function guardarExternalizacionesEnNavegador(solicitudes) {
-    try {
-        localStorage.setItem(obtenerClaveExternalizaciones(), JSON.stringify(solicitudes));
-    } catch (error) {
-        throw new Error('el navegador no permitió guardar la información');
-    }
-}
-
-function generarIdExternalizacion() {
-    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-}
-
-function eliminarExternalizacionLocal(id) {
-    const solicitudes = obtenerExternalizacionesDelNavegador();
-    const nuevasSolicitudes = solicitudes.filter(item => item.id !== id);
-    guardarExternalizacionesEnNavegador(nuevasSolicitudes);
-    cargarExternalizaciones();
-    mostrarMensaje('externalizacionMessage', 'Solicitud eliminada del navegador', 'success');
-}
-
-function cargarExternalizaciones() {
+async function cargarExternalizaciones(mostrarConfirmacion = false) {
     const contenedor = document.getElementById('externalizacionesListado');
     if (!contenedor) return;
 
-    const solicitudes = obtenerExternalizacionesDelNavegador();
-    if (solicitudes.length === 0) {
-        contenedor.innerHTML = '<p class="text-gray-500">Todavía no hay solicitudes guardadas en este navegador.</p>';
+    contenedor.innerHTML = '<p class="text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i>Cargando solicitudes...</p>';
+
+    try {
+        const response = await fetch('get_externalizaciones.php');
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || 'No se pudieron cargar las solicitudes');
+        }
+
+        renderExternalizaciones(result.data || []);
+        if (mostrarConfirmacion) {
+            mostrarMensaje('externalizacionMessage', 'Listado actualizado desde la base de datos', 'success');
+        }
+    } catch (error) {
+        console.error(error);
+        contenedor.innerHTML = `<p class="text-red-600">Error al cargar solicitudes: ${escapeHtmlSourcing(error.message)}</p>`;
+    }
+}
+
+function renderExternalizaciones(solicitudes) {
+    const contenedor = document.getElementById('externalizacionesListado');
+    if (!contenedor) return;
+
+    if (!solicitudes.length) {
+        contenedor.innerHTML = '<p class="text-gray-500">Todavía no hay solicitudes registradas en la base de datos.</p>';
         return;
     }
 
     const filas = solicitudes.map(item => {
-        const categorias = [item.categoria_nivel_1_texto, item.categoria_nivel_2_texto, item.categoria_nivel_3_texto]
-            .filter(Boolean)
-            .join(' / ') || '-';
+        const categorias = [
+            item.categoria_nivel_1_texto,
+            item.categoria_nivel_2_texto,
+            item.categoria_nivel_3_texto
+        ].filter(Boolean).join(' / ') || '-';
 
         return `
             <tr class="border-b hover:bg-gray-50 align-top">
@@ -279,6 +218,7 @@ function cargarExternalizaciones() {
                 <td class="px-3 py-2 capitalize">${escapeHtmlSourcing(item.prioridad || '-')}</td>
                 <td class="px-3 py-2">${escapeHtmlSourcing(categorias)}</td>
                 <td class="px-3 py-2">${escapeHtmlSourcing(item.fecha_requerida || '-')}</td>
+                <td class="px-3 py-2 capitalize">${escapeHtmlSourcing(item.estado || '-')}</td>
                 <td class="px-3 py-2">${escapeHtmlSourcing(item.created_at || '-')}</td>
                 <td class="px-3 py-2 text-right">
                     <button type="button" class="text-red-600 hover:underline" data-external-delete="${escapeHtmlSourcing(item.id)}">
@@ -287,7 +227,7 @@ function cargarExternalizaciones() {
                 </td>
             </tr>
             <tr class="border-b bg-gray-50">
-                <td class="px-3 py-2 text-gray-600" colspan="7">
+                <td class="px-3 py-2 text-gray-600" colspan="8">
                     <strong>Descripción:</strong> ${escapeHtmlSourcing(item.descripcion || '-')}
                     ${item.ubicacion_entrega ? `<br><strong>Entrega:</strong> ${escapeHtmlSourcing(item.ubicacion_entrega)}` : ''}
                     ${item.presupuesto ? `<br><strong>Presupuesto:</strong> $${escapeHtmlSourcing(item.presupuesto)}` : ''}
@@ -306,7 +246,8 @@ function cargarExternalizaciones() {
                     <th class="px-3 py-2 text-left">Prioridad</th>
                     <th class="px-3 py-2 text-left">Categorías</th>
                     <th class="px-3 py-2 text-left">Fecha requerida</th>
-                    <th class="px-3 py-2 text-left">Guardado</th>
+                    <th class="px-3 py-2 text-left">Estado</th>
+                    <th class="px-3 py-2 text-left">Registro</th>
                     <th class="px-3 py-2 text-right">Acciones</th>
                 </tr>
             </thead>
@@ -315,12 +256,60 @@ function cargarExternalizaciones() {
     `;
 
     contenedor.querySelectorAll('[data-external-delete]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const confirmar = window.confirm('¿Eliminar esta solicitud guardada en el navegador?');
-            if (!confirmar) return;
-            eliminarExternalizacionLocal(btn.dataset.externalDelete);
-        });
+        btn.addEventListener('click', () => eliminarExternalizacion(btn.dataset.externalDelete));
     });
+}
+
+async function eliminarExternalizacion(id) {
+    const confirmar = window.confirm('¿Eliminar esta solicitud de la base de datos?');
+    if (!confirmar) return;
+
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+
+        const response = await fetch('delete_externalizacion.php', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || 'No se pudo eliminar');
+        }
+
+        mostrarMensaje('externalizacionMessage', result.message || 'Solicitud eliminada', 'success');
+        await cargarExternalizaciones();
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje('externalizacionMessage', 'Error al eliminar: ' + error.message, 'error');
+    }
+}
+
+async function eliminarTodasExternalizaciones() {
+    const confirmar = window.confirm('Esto eliminará todas tus solicitudes de externalización guardadas en la base de datos. ¿Deseas continuar?');
+    if (!confirmar) return;
+
+    try {
+        const formData = new FormData();
+        formData.append('all', '1');
+
+        const response = await fetch('delete_externalizacion.php', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || 'No se pudieron eliminar las solicitudes');
+        }
+
+        mostrarMensaje('externalizacionMessage', result.message || 'Solicitudes eliminadas', 'success');
+        await cargarExternalizaciones();
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje('externalizacionMessage', 'Error al borrar solicitudes: ' + error.message, 'error');
+    }
 }
 
 function escapeHtmlSourcing(value) {

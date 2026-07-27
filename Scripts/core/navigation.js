@@ -122,7 +122,14 @@ function configurarMenu(rol) {
     document.querySelectorAll('[data-modulo]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            cargarModulo(link.getAttribute('data-modulo'));
+            const modulo = link.getAttribute('data-modulo');
+            document.querySelectorAll('[data-modulo]').forEach(item => {
+                item.classList.remove('active');
+                item.removeAttribute('aria-current');
+            });
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+            cargarModulo(modulo);
         });
     });
 }

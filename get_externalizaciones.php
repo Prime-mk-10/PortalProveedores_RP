@@ -1,59 +1,34 @@
 <?php
-require_once 'config/db.php';
+require_once 'externalizaciones_db.php';
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    echo json_encode(['success' => false, 'message' => 'No autenticado']);
-    exit;
-}
-
-function crearTablaExternalizacionesSiNoExiste(mysqli $conn) {
-    $sql = "CREATE TABLE IF NOT EXISTS externalizaciones_productos (
-        id INT(11) NOT NULL AUTO_INCREMENT,
-        user_id INT(11) NOT NULL,
-        producto_nombre VARCHAR(255) NOT NULL,
-        descripcion TEXT NOT NULL,
-        cantidad DECIMAL(12,2) DEFAULT NULL,
-        unidad VARCHAR(50) DEFAULT NULL,
-        presupuesto DECIMAL(12,2) DEFAULT NULL,
-        fecha_requerida DATE DEFAULT NULL,
-        categoria_nivel_1 INT(11) DEFAULT NULL,
-        categoria_nivel_2 INT(11) DEFAULT NULL,
-        categoria_nivel_3 INT(11) DEFAULT NULL,
-        ubicacion_entrega VARCHAR(255) DEFAULT NULL,
-        prioridad ENUM('baja','media','alta') NOT NULL DEFAULT 'media',
-        observaciones TEXT DEFAULT NULL,
-        estado ENUM('pendiente','en_revision','externalizado','cancelado') NOT NULL DEFAULT 'pendiente',
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        PRIMARY KEY (id),
-        KEY idx_externalizaciones_user (user_id),
-        KEY idx_externalizaciones_estado (estado),
-        KEY idx_externalizaciones_cat_n1 (categoria_nivel_1),
-        KEY idx_externalizaciones_cat_n2 (categoria_nivel_2),
-        KEY idx_externalizaciones_cat_n3 (categoria_nivel_3),
-        CONSTRAINT fk_externalizaciones_usuario FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
-
-    if (!$conn->query($sql)) {
-        throw new Exception('No se pudo preparar la tabla de externalizaciones: ' . $conn->error);
-    }
-}
+validarSesionExternalizacion();
 
 try {
     $conn = getConnection();
     crearTablaExternalizacionesSiNoExiste($conn);
 
     $user_id = (int)$_SESSION['user_id'];
-    $sql = "SELECT id, producto_nombre, descripcion, cantidad, unidad, presupuesto, fecha_requerida,
-                   categoria_nivel_1, categoria_nivel_2, categoria_nivel_3, ubicacion_entrega,
-                   prioridad, observaciones, estado, DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS created_at
-            FROM externalizaciones_productos
-            WHERE user_id = ?
-            ORDER BY id DESC";
+    $sql = "SELECT ep.id, ep.producto_nombre, ep.descripcion, ep.cantidad, ep.unidad, ep.presupuesto,
+                   ep.fecha_requerida, ep.categoria_nivel_1, ep.categoria_nivel_2, ep.categoria_nivel_3,
+                   ep.ubicacion_entrega, ep.prioridad, ep.observaciones, ep.estado,
+                   DATE_FORMAT(ep.created_at, '%Y-%m-%d %H:%i') AS created_at,
+                   CASE WHEN c1.codigo IS NOT NULL THEN CONCAT(c1.codigo, ' - ', c1.nombre) ELSE NULL END AS categoria_nivel_1_texto,
+                   CASE WHEN c2.codigo IS NOT NULL THEN CONCAT(c2.codigo, ' - ', c2.nombre) ELSE NULL END AS categoria_nivel_2_texto,
+                   CASE WHEN c3.codigo IS NOT NULL THEN CONCAT(c3.codigo, ' - ', c3.nombre) ELSE NULL END AS categoria_nivel_3_texto
+            FROM externalizaciones_productos ep
+            LEFT JOIN categorias_nivel_1 c1 ON c1.codigo COLLATE utf8mb4_unicode_ci = ep.categoria_nivel_1 COLLATE utf8mb4_unicode_ci
+            LEFT JOIN categorias_nivel_2 c2 ON c2.codigo COLLATE utf8mb4_unicode_ci = ep.categoria_nivel_2 COLLATE utf8mb4_unicode_ci
+            LEFT JOIN categorias_nivel_3 c3 ON c3.codigo COLLATE utf8mb4_unicode_ci = ep.categoria_nivel_3 COLLATE utf8mb4_unicode_ci
+            WHERE ep.user_id = ?
+            ORDER BY ep.id DESC";
 
     $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception('Error preparando consulta: ' . $conn->error);
+    }
+
     $stmt->bind_param('i', $user_id);
     $stmt->execute();
     $result = $stmt->get_result();

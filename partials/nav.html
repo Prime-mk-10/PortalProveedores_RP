@@ -2,21 +2,28 @@
 <nav class="fixed top-0 z-50 w-full bg-white border-b border-default">
   <div class="px-3 py-3 lg:px-5 lg:pl-3">
     <div class="flex items-center justify-between">
-      <div class="flex items-center justify-start rtl:justify-end">
+      <div class="flex items-center justify-start rtl:justify-end gap-3">
         <button data-drawer-target="top-bar-sidebar" data-drawer-toggle="top-bar-sidebar" aria-controls="top-bar-sidebar" type="button" class="sm:hidden text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm p-2 focus:outline-none">
           <span class="sr-only">Abrir menú</span>
           <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h10"/>
           </svg>
         </button>
-        <a href="#" id="logoLink" class="flex ms-2 md:me-24 items-center">
-          <img src="./Images/Portal_Gestion.png" class="h-8 me-3" alt="Logo CDMX" />
+        <a href="#" id="logoLink" class="flex ms-2 items-center gap-3">
+          <img src="./Images/Portal_Gestion.png" class="h-9" alt="Logo Portal de Proveedores" />
+          <span class="hidden md:block leading-tight">
+            <span class="block text-sm font-extrabold text-[#0b3b5b]">Portal de Proveedores</span>
+            <span class="block text-xs text-gray-500">Gestión de sourcing y concierge</span>
+          </span>
         </a>
       </div>
-      <div class="flex items-center">
-        <!-- Solo mostramos el correo del usuario, sin dropdown -->
-        <div class="text-sm text-gray-700">
-          <i class="fas fa-user-circle mr-1"></i>
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 rounded-full bg-[#eef8fb] px-3 py-1.5 text-xs font-bold text-[#0b3b5b] border border-[#cdebf2]">
+          <i class="fas fa-shield-alt"></i>
+          Sesión activa
+        </div>
+        <div class="text-sm text-gray-700 flex items-center gap-2 rounded-full bg-white px-3 py-1.5 border border-[#dbe7ef]">
+          <i class="fas fa-user-circle text-[#0b3b5b]"></i>
           <span id="topUserEmail">Cargando...</span>
         </div>
       </div>
@@ -27,16 +34,22 @@
 <!-- Sidebar (drawer) -->
 <aside id="top-bar-sidebar" class="fixed top-0 left-0 z-40 w-64 h-full transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
   <div class="h-full px-3 py-4 overflow-y-auto bg-neutral-primary-soft border-e border-default">
-    <a href="#" class="flex items-center ps-2.5 mb-5">
-      <img src="./Images/Portal_Gestion.png" class="h-6 me-3" alt="Logo CDMX" />
+    <a href="#" class="flex items-center ps-2.5 mb-6">
+      <img src="./Images/Portal_Gestion.png" class="h-9 me-3" alt="Logo Portal" />
       <span class="self-center text-lg text-heading font-semibold whitespace-nowrap">Módulos</span>
     </a>
+
+    <div class="mb-5 rounded-2xl border border-white/15 bg-white/10 p-3 text-white/85">
+      <p class="text-xs uppercase tracking-widest text-cyan-100/80 font-bold">Centro de trabajo</p>
+      <p class="text-sm font-semibold mt-1">Portal integral para proveedores</p>
+    </div>
+
     <ul id="sidebarMenu" class="space-y-2 font-medium">
       <!-- Los módulos se inyectan aquí con JS -->
     </ul>
 
-    <!-- Información del usuario (opcional, puede mostrar rol) -->
-    <div class="mt-6 pt-4 border-t border-default">
+    <!-- Información del usuario -->
+    <div class="mt-6 pt-4 border-t border-white/15">
       <div id="infoUsuario" class="proveedor-tag">
         <i class="fas fa-user-circle"></i> Cargando...
       </div>

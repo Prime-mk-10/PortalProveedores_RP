@@ -1,22 +1,29 @@
 <div class="space-y-6" id="sourcing-view">
-  <div>
-    <h1 class="text-2xl font-bold text-[#0b3b5b] mb-2">Sourcing</h1>
-    <p class="text-gray-600 text-sm">Administra tu perfil y utiliza una vista interactiva para externalizar productos desde pestañas separadas.</p>
-  </div>
+  <section class="portal-hero">
+    <span class="portal-eyebrow"><i class="fas fa-search"></i> Sourcing</span>
+    <h1>Gestión de perfil y externalización</h1>
+    <p>Administra la información del proveedor y registra necesidades de productos o servicios para seguimiento desde la base de datos.</p>
+  </section>
 
   <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
     <div class="flex flex-col md:flex-row border-b border-gray-200" role="tablist" aria-label="Pestañas de Sourcing">
-      <button type="button" data-sourcing-tab-button="perfil" class="sourcing-tab-btn px-5 py-3 text-left font-semibold text-[#0b3b5b] border-b-2 border-[#0b3b5b] bg-[#f8fbfd]" aria-selected="true">
-        <i class="fas fa-user mr-2"></i>Perfil
+      <button type="button" data-sourcing-tab-button="perfil" class="sourcing-tab-btn px-5 py-4 text-left font-semibold text-[#0b3b5b] border-b-2 border-[#0b3b5b] bg-[#f8fbfd]" aria-selected="true">
+        <i class="fas fa-id-card mr-2"></i>Perfil del proveedor
       </button>
-      <button type="button" data-sourcing-tab-button="externalizar" class="sourcing-tab-btn px-5 py-3 text-left font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-50" aria-selected="false">
+      <button type="button" data-sourcing-tab-button="externalizar" class="sourcing-tab-btn px-5 py-4 text-left font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-50" aria-selected="false">
         <i class="fas fa-box-open mr-2"></i>Externalizar producto
       </button>
     </div>
 
-    <section data-sourcing-tab-panel="perfil" class="p-4">
+    <section data-sourcing-tab-panel="perfil" class="p-5">
 <div>
-  <h2 class="text-2xl font-bold text-[#0b3b5b] mb-4">Mi Perfil</h2>
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+    <div>
+      <h2 class="text-2xl font-bold text-[#0b3b5b] mb-1">Mi Perfil</h2>
+      <p class="text-sm text-gray-500">Datos fiscales, contacto, categorías Concierge y documentos relacionados.</p>
+    </div>
+    <span class="portal-pill"><i class="fas fa-user-check"></i> Información del proveedor</span>
+  </div>
 
   <!-- Contenedor para ofertantes -->
   <div id="ofertante-section" style="display: none">
@@ -440,15 +447,16 @@
 
     </section>
 
-    <section data-sourcing-tab-panel="externalizar" class="hidden p-4">
+    <section data-sourcing-tab-panel="externalizar" class="hidden p-5">
 
 <div class="space-y-6">
-  <div>
+  <div class="rounded-3xl border border-[#dbe7ef] bg-[#f5fbfd] p-5">
+    <span class="portal-pill mb-3"><i class="fas fa-database"></i> Guardado en MySQL</span>
     <h2 class="text-2xl font-bold text-[#0b3b5b] mb-2">Externalizar producto</h2>
-    <p class="text-gray-600 text-sm">Captura el producto o servicio que necesitas externalizar. Esta vista guarda la información solamente en este navegador y no crea tablas en la base de datos.</p>
+    <p class="text-gray-600 text-sm">Captura el producto o servicio que necesitas externalizar. Las solicitudes se guardarán en la base de datos y quedarán asociadas a tu usuario.</p>
   </div>
 
-  <form id="externalizacionForm" class="space-y-4 bg-white border border-gray-200 rounded-lg p-4">
+  <form id="externalizacionForm" class="space-y-4 bg-white border border-gray-200 rounded-lg p-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <label class="block text-gray-700 font-medium mb-1">Producto o servicio a externalizar:</label>
@@ -512,30 +520,30 @@
 
     <div class="flex flex-col md:flex-row md:items-center gap-3 pt-2">
       <button type="submit" class="bg-[#0b3b5b] text-white px-6 py-2 rounded hover:bg-[#0f4a73]">
-        <i class="fas fa-save mr-2"></i>Guardar en navegador
+        <i class="fas fa-save mr-2"></i>Guardar en base de datos
       </button>
       <button type="reset" class="bg-gray-200 px-6 py-2 rounded hover:bg-gray-300">Limpiar</button>
       <div id="externalizacionMessage" class="text-sm"></div>
     </div>
   </form>
 
-  <div class="bg-white border border-gray-200 rounded-lg p-4">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+  <div class="bg-white border border-gray-200 rounded-lg p-5">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
       <div>
-        <h3 class="text-lg font-bold text-[#0b3b5b]">Solicitudes locales</h3>
-        <p class="text-sm text-gray-500">Aquí aparecerán los productos o servicios guardados en este navegador.</p>
+        <h3 class="text-lg font-bold text-[#0b3b5b]">Solicitudes registradas</h3>
+        <p class="text-sm text-gray-500">Aquí aparecerán los productos o servicios guardados en la base de datos.</p>
       </div>
       <div class="flex flex-col sm:flex-row gap-2">
         <button type="button" id="btnRecargarExternalizaciones" class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">
           <i class="fas fa-rotate mr-2"></i>Actualizar vista
         </button>
         <button type="button" id="btnLimpiarExternalizaciones" class="bg-red-50 text-red-700 px-4 py-2 rounded hover:bg-red-100">
-          <i class="fas fa-trash mr-2"></i>Borrar todo
+          <i class="fas fa-trash mr-2"></i>Borrar mis solicitudes
         </button>
       </div>
     </div>
     <div id="externalizacionesListado" class="overflow-x-auto text-sm text-gray-600">
-      <p>No hay solicitudes guardadas todavía.</p>
+      <p>No hay solicitudes registradas todavía.</p>
     </div>
   </div>
 </div>
